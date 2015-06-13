@@ -23,24 +23,22 @@ Easy to write adapters for your favorite framework.
 * mithril
 * react
 
-#### Requesting
-
-* superagent
-
 ## Components
 
 Create `components/home.coffee`:
 
     module.exports = class
       constructor: ->
-        @r("/title.json").then (@title) =>
+        @title = "title"
 
       view: ->
         @v @View
 
       View: class
         constructor: ({ @title }) ->
+
         header: -> H1 @title
+        
         view:
           if @server
             HTML [
@@ -57,7 +55,7 @@ Create `components/home.coffee`:
 * The `@server` variable is present when executing server side
 * Use the `@v` helper to instantiate and render stateless view classes
 * Use the `@c` helper to instantiate stateful components
-* Use the `@r` helper to make HTTP requests
+* Use the `@r` helper to manually render
 
 ## Routes
 
