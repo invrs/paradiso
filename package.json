@@ -1,0 +1,11 @@
+{
+  "name": "paradiso",
+  "version": "1.0.0",
+  "description": "Thin layer to run isomorphic apps on any framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "author": "Winton Welsh <winton@cyclo.ps>",
+  "license": "MIT"
+}
