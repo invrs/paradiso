@@ -48,7 +48,7 @@ Create `components/home.coffee`:
 
 #### Component basics
 
-* Components typically have a `view` function (unless the component only exists to hold state)
+* Components typically have a `view` function
 * The `@params` variable is always present and holds route parameters
 * The `@server` variable is present when executing server side
 * Use the `@v` helper to instantiate and render stateless view classes
