@@ -23,8 +23,6 @@ Easy to write adapters for your favorite framework.
 * mithril
 * react
 
-## Routes
-
 ## Components
 
 Create `components/home.coffee`:
@@ -39,6 +37,8 @@ Create `components/home.coffee`:
       View: class
         constructor: ({ @title } = { title }) ->
         view: HTML HEAD @title
+
+## Routes
 
 Create `routes.coffee`:
 
