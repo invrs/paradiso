@@ -1,10 +1,8 @@
 # paradiso
 
-Thin layer to run isomorphic apps on any javascript client or web server framework.
+Thin layer to run isomorphic apps on any javascript client or server framework.
 
 ## What it does
-
-Paradiso provides a thin interface between web servers and client frameworks.
 
 Build apps that render statically on the first request, then turn dynamic.
 
