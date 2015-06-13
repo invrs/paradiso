@@ -1,10 +1,14 @@
-# paradiso
+# Paradiso
 
 Thin layer to run isomorphic apps on any javascript client or server framework.
 
-## What it does
+## Features
+
+Provides a common way of defining routes and components.
 
 Build apps that render statically on the first request, then turn dynamic.
+
+Switch rendering and routing engines in one line of code.
 
 Easy to write adapters for your favorite framework.
 
