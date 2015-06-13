@@ -14,11 +14,11 @@ Easy to write adapters for your favorite framework.
 
 ## Adapters
 
-### Web server
+#### Web server
 
 * express
 
-### Isomorphic rendering and client routing
+#### Rendering and client routing
 
 * mithril
 * react
