@@ -10,16 +10,20 @@ Build apps that render statically on the first request, then turn dynamic.
 
 Switch framework or web server at any time.
 
-## Problem domains
+## Adapters
 
-* Routing
-* Defining state
-* Rendering views
-* Bootstrapping data
+Web servers:
+
+* express
+
+Frameworks:
+
+* mithril
+* react
 
 ## Server
 
-`server.coffee`:
+Create `server.coffee`:
 
     Paradiso = require "paradiso"
 
@@ -32,7 +36,7 @@ Switch framework or web server at any time.
 
 ## Home component
 
-`components/home.coffee`:
+Create `components/home.coffee`:
 
 ### Coffee components
 
@@ -67,13 +71,13 @@ Paradiso ships with its own [default way of writing components](https://github.c
           <title>{@state.title}</title>
         </html>
 
-## Adapters
+## Boot the server
 
-Paradiso supports:
+By now you've created `server.coffee` and `component/home.coffee`.
 
-* express
-* mithril
-* react
+Start the server:
+
+    coffee server.coffee
 
 ### Build an adapter
 
