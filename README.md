@@ -1,10 +1,10 @@
 # Paradiso
 
-An adaptive way to write reactive and isomorphic apps on any js framework.
+Write reactive and isomorphic apps on any js framework.
 
 ## Features
 
-Build apps that render statically on the first request, then turn dynamic.
+Provides a common style for defining components and routes.
 
 Change rendering and routing engines in one line of code.
 
