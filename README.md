@@ -24,15 +24,28 @@ Switch framework or web server at any time.
     Paradiso = require "paradiso"
 
     new Paradiso
-      express: require "express"
-      mithril: require "mithril"
-      # react: require "react"
+      express:   require "express"
+      # mithril: require "mithril"
+      # react:   require "react"
     .routes
       "/": require "./components/home"
 
 ## Home component
 
 `components/home.coffee`:
+
+### Coffee components
+
+Paradiso ships with its own [default way of writing components](https://github.com/invrs/coffee-component).
+
+    module.exports = class
+      constructor: ->
+        @title = "hello"
+
+      View: class
+        constructor: ({ @title } = { title }) ->
+        view: 
+          "<html><head>#{@title}</head></html>"
 
 ### Mithril
 
