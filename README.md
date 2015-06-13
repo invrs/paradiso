@@ -25,9 +25,6 @@ Easy to write adapters for your favorite framework.
 
 ## Routes
 
-    module.exports =
-      "/": require "./components/home"
-
 ## Components
 
 Create `components/home.coffee`:
@@ -42,6 +39,11 @@ Create `components/home.coffee`:
       View: class
         constructor: ({ @title } = { title }) ->
         view: HTML HEAD @title
+
+Create `routes.coffee`:
+
+    module.exports =
+      "/": require "./components/home"
 
 ## Client
 
