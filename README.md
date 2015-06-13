@@ -1,14 +1,14 @@
 # Paradiso
 
-Thin layer to run isomorphic apps on any javascript client or server framework.
+Write isomorphic apps on any javascript client or server framework.
 
 ## Features
 
-Defines a common way of defining reactive routes and components.
+Defines a common way of defining reactive components, routes, and requests across frameworks.
 
 Build apps that render statically on the first request, then turn dynamic.
 
-Switch rendering and routing engines in one line of code.
+Change rendering and routing engines in one line of code.
 
 Easy to write adapters for your favorite framework.
 
@@ -29,14 +29,31 @@ Create `components/home.coffee`:
 
     module.exports = class
       constructor: ->
-        @title = "hello"
+        @r("/title.json").then (@title) =>
 
       view: ->
-        @v View
+        @v @View
 
       View: class
-        constructor: ({ @title } = { title }) ->
-        view: HTML HEAD @title
+        constructor: ({ @title }) ->
+        header: -> H1 @title
+        view:
+          if @server
+            HTML [
+              HEAD TITLE @title
+              BODY @header()
+            ]
+          else
+            @header()
+
+### Component basics
+
+* Components typically have a `view` function (unless the component only exists to hold state)
+* The `@params` variable is always present and holds route parameters
+* The `@server` variable is present when executing server side
+* Use the `@v` helper to instantiate and render stateless view classes
+* Use the `@c` helper to instantiate stateful components
+* Use the `@r` helper to make HTTP requests
 
 ## Routes
 
@@ -52,10 +69,11 @@ Create `client.coffee`:
     Paradiso = require "paradiso"
 
     new Paradiso
-      # Uncomment one:
+      # Framework (uncomment one):
       #
       # mithril: require "mithril"
       # react:   require "react"
+
     .routes require "./routes"
 
 ## Server
@@ -65,31 +83,42 @@ Create `server.coffee`:
     Paradiso = require "paradiso"
 
     new Paradiso
-      # Web server
+      # Web server:
       #
       express: require "express"
 
-      # Framework Uncomment one:
+      # Framework (uncomment one):
       #
       # mithril: require "mithril"
       # react:   require "react"
+
     .routes require "./routes"
 
-## Boot the server
+## Start the server
 
-You now have `client.coffee`, `server.coffee`, and `component/home.coffee`.
+You should now have the following files:
 
-Start the server:
+* `component/home.coffee`
+* `routes.coffee`
+* `client.coffee`
+* `server.coffee`
+
+Now start the server:
 
     coffee server.coffee
 
-## Adapter example
+## Framework adapter example
+
+Its easy to make paradiso work with your favorite framework.
 
     Paradiso = require "paradiso"
 
-    Paradiso.adapters.basic = class
-      constructor: (Klass, @server) -> @klass = new Klass(@server)
-      view:                         -> @klass.view.apply(@, arguments)
+    Paradiso.adapters.mylib = class
+      constructor: ({ Component, Framework, @server }) ->
+        @component = new Component()
+      view: ->
+        @component.view()
 
-    new Paradiso().routes
-      "/": class view: "hello"
+    new Paradiso(mylib: true)
+      .routes
+        "/": class view: "hello"
