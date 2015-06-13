@@ -107,6 +107,15 @@ Now start the server:
 
     coffee server.coffee
 
+## Converting your project
+
+Paradiso allows you to mix and match between common and framework-specific component styles while you convert your project.
+
+Just specify the style in the route:
+
+    module.exports =
+      "/": mithril: require "./components/home"
+
 ## Framework adapter example
 
 Its easy to make paradiso work with your favorite framework.
