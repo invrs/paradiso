@@ -4,7 +4,7 @@ Write isomorphic apps on any javascript client or server framework.
 
 ## Features
 
-Defines a common way of defining reactive components, routes, and requests across frameworks.
+Defines a common way of creating reactive components, routes, and requests across frameworks.
 
 Build apps that render statically on the first request, then turn dynamic.
 
@@ -18,10 +18,14 @@ Easy to write adapters for your favorite framework.
 
 * express
 
-#### Rendering and client routing
+#### Rendering and routing
 
 * mithril
 * react
+
+#### Requesting
+
+* superagent
 
 ## Components
 
@@ -46,7 +50,7 @@ Create `components/home.coffee`:
           else
             @header()
 
-### Component basics
+#### Component basics
 
 * Components typically have a `view` function (unless the component only exists to hold state)
 * The `@params` variable is always present and holds route parameters
