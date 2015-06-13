@@ -4,7 +4,7 @@ Thin layer to run isomorphic apps on any javascript client or server framework.
 
 ## Features
 
-Provides a common way of defining routes and components.
+Defines a common way of defining reactive routes and components.
 
 Build apps that render statically on the first request, then turn dynamic.
 
@@ -14,11 +14,11 @@ Easy to write adapters for your favorite framework.
 
 ## Adapters
 
-Web servers:
+### Web server
 
 * express
 
-Frameworks:
+### Isomorphic rendering and client routing
 
 * mithril
 * react
