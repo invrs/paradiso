@@ -1,10 +1,10 @@
 # Paradiso
 
-Write reactive and isomorphic apps on any js framework.
+A common way to write reactive and isomorphic apps on any js framework.
 
 ## Features
 
-Provides a common style for defining components and routes.
+Provides a standard style for defining components and routes.
 
 Change rendering and routing engines in one line of code.
 

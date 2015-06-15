@@ -1,11 +1,17 @@
 {
   "name": "paradiso",
   "version": "1.0.0",
-  "description": "Thin layer to run isomorphic apps on any framework.",
+  "description": "A common way to write reactive and isomorphic apps on any js framework.",
   "main": "index.js",
   "scripts": {
     "test": "jasmine"
   },
   "author": "Winton Welsh <winton@cyclo.ps>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "coffee-script": ""
+  },
+  "devDependencies": {
+    "jasmine": ""
+  }
 }
