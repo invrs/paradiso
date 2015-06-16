@@ -49,8 +49,8 @@ Create `components/home.coffee`:
 #### Component basics
 
 * Components typically have a `view` function
-* The `@params` variable is always present and holds route parameters
-* The `@promises` variable is an array to append promises that need resolution before the server should render your views
+* The `@params` object is always present and holds route parameters
+* The `@promises` array allows you to append promises that need resolution before the server should render your views
 * The `@server` variable exists when rendering server side
 
 #### Helper functions
