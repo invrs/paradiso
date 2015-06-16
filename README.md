@@ -6,7 +6,9 @@ A common way to write reactive and isomorphic apps on any js framework.
 
 Provides a standard style for defining components and routes.
 
-Change rendering and routing engines in one line of code.
+Aims to be simple, unobtrusive, and more traditionally object-oriented.
+
+Change rendering engines and web servers in two lines of code.
 
 Easy to write adapters for your favorite framework.
 
@@ -63,7 +65,13 @@ Calling the `@homeView()` helper method creates an instance of the `HomeView` co
 
 If a component is stateful, that means its class instance variables maintain state across multiple renders.
 
-View classes should only exist for the lifetime of the individual render. Paradiso knows to make `HomeView` a stateless component because of the word `View` at the end of it.
+Renders don't just occur when you visit a new URL. They can happen repeatedly as dynamic actions take place.
+
+#### View classes are stateless
+
+View classes should only exist for the lifetime of an individual render. Paradiso knows to make `HomeView` a stateless component because of the word `View` at the end of it.
+
+You can see in the above example that it is easy to reference a parent component's variables (`@title`). Just add it as a [destructuring assignment](http://coffeescript.org/#destructuring) on the constructor.
 
 Name a class without `View` at the end, and it will be automatically be stateful.
 
