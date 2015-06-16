@@ -12,7 +12,7 @@ Easy to write adapters for your favorite framework.
 
 ## Adapters
 
-#### Rendering and routing
+#### Rendering
 
 * mithril
 * react
@@ -30,9 +30,9 @@ Create `components/home.coffee`:
         @title = "title"
 
       view: ->
-        @v @View
+        @homeView()
 
-      View: class
+      HomeView: class
         constructor: ({ @title }) ->
 
         header: -> H1 @title
@@ -50,10 +50,31 @@ Create `components/home.coffee`:
 
 * Components typically have a `view` function
 * The `@params` variable is always present and holds route parameters
-* The `@server` variable is present when executing server side
-* Use the `@v` helper to instantiate and render stateless view classes
-* Use the `@c` helper to instantiate stateful components
-* Use the `@r` helper to manually render
+* The `@promises` variable is an array to append promises that need resolution before the server should render your views
+* The `@server` variable exists when rendering server side
+
+#### Helper functions
+
+When you define a class within your component (`HomeView`), Paradiso generates a helper method (`@homeView`) to accompany it.
+
+Calling the `@homeView()` helper method creates an instance of the `HomeView` component and calls the `view()` method on it.
+
+#### Stateful vs stateless
+
+If a component is stateful, that means its class instance variables maintain state across multiple renders.
+
+View classes should only exist for the lifetime of the individual render. Paradiso knows to make `HomeView` a stateless component because of the word `View` at the end of it.
+
+Name a class without `View` at the end, and it will be automatically be stateful.
+
+#### Similar components
+
+Sometimes you need to store multiple instances of the same component.
+
+To ensure a component keeps its own state, call the component's helper method with an `id` argument:
+
+   @myComponent 1
+   @myComponent 2
 
 ## Routes
 
@@ -115,18 +136,3 @@ Just specify the style in the route:
 
     module.exports =
       "/": mithril: require "./components/home"
-
-## Framework adapter example
-
-Its easy to make paradiso work with your favorite framework.
-
-    Paradiso = require "paradiso"
-
-    new Paradiso(
-      mylib: class
-        constructor: ({ Component, @render, @server }) ->
-          @component = new Component()
-        view: ->
-          @component.view()
-    ).routes
-      "/": class view: "hello"
