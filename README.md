@@ -71,15 +71,17 @@ Renders don't just occur when you visit a new URL. They can happen repeatedly as
 
 View classes should only exist for the lifetime of an individual render. Paradiso knows to make `HomeView` a stateless component because of the word `View` at the end of it.
 
-You can see in the above example that it is easy to reference a parent component's variables (`@title`). Just add it as a [destructuring assignment](http://coffeescript.org/#destructuring) on the constructor.
+It is common practice to reference a parent component's variables (`@title`). Just add the variable name as a [destructuring assignment](http://coffeescript.org/#destructuring) on the constructor.
 
-Name a class without `View` at the end, and it will be automatically be stateful.
+#### Non-view classes are stateful
+
+If you name a class without `View` at the end, it will be automatically be stateful.
 
 #### Similar components
 
-Sometimes you need to store multiple instances of the same component.
+Sometimes you need to store multiple instances of the same stateful component.
 
-To ensure a component keeps its own state, call the component's helper method with an `id` argument:
+To ensure a component keeps its own distinct state, call the component's helper method with an `id` argument:
 
     @myComponent 1
     @myComponent 2
