@@ -75,7 +75,7 @@ It is common practice to reference a parent component's variables (`@title`). Ju
 
 #### Non-view classes are stateful
 
-If you name a class without `View` at the end, it will be automatically be stateful.
+If you name a class without `View` at the end, it will be automatically be stateful when creating and referencing it using the helper function.
 
 #### Similar components
 
