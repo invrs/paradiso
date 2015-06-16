@@ -29,15 +29,14 @@ Create `components/home.coffee`:
 
     module.exports = class
       constructor: ->
-        @title = "title"
+        @title = "Welcome"
 
-      view: ->
-        @homeView()
+      view: -> @homeView()
 
       HomeView: class
-        constructor: ({ @title }) ->
+        constructor: ({ @title, @user }) ->
 
-        header: -> H1 @title
+        header: -> H1 "Hello, #{@user().login}"
         
         view:
           if @server
@@ -48,6 +47,11 @@ Create `components/home.coffee`:
           else
             @header()
 
+      User: class
+        constructor: -> @name = "Joe"
+
+While somewhat of a contrived example, you can see how uni-directional data flow works with a traditional OOP model.
+
 #### Component basics
 
 * Components typically have a `view` function
@@ -57,9 +61,9 @@ Create `components/home.coffee`:
 
 #### Helper functions
 
-When you define a class within your component (`HomeView`), Paradiso generates a helper method (`@homeView`) to accompany it.
+When you define a component within a component (`User`), Paradiso generates a helper method (`@user`) to accompany it.
 
-Calling the `@homeView()` helper method creates an instance of the `HomeView` component and calls the `view()` method on it.
+Calling the `@user()` helper method creates an instance of the `User` component and keeps a reference to it next time you call it.
 
 #### Stateful vs stateless
 
@@ -67,15 +71,13 @@ If a component is stateful, that means its class instance variables maintain sta
 
 Renders don't just occur when you visit a new URL. They can happen repeatedly as dynamic actions take place.
 
-#### View classes are stateless
+#### View components
 
-View classes should only exist for the lifetime of an individual render. Paradiso knows to make `HomeView` a stateless component because of the word `View` at the end of it.
+Name your view components with the word `View` at the end of it (`HomeView`).
 
-It is common practice to reference a parent component's variables (`@title`). Just add the variable name as a [destructuring assignment](http://coffeescript.org/#destructuring) on the constructor.
+View classes are stateless. View classes only exist for the lifetime of a single render.
 
-#### Non-view classes are stateful
-
-If you name a class without `View` at the end, it will be automatically be stateful when creating and referencing it using the helper function.
+The helper function knows not to preserve state on View components. It also knows to automatically call the `view` function and return its result on View classes.
 
 #### Similar components
 
