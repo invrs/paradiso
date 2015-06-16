@@ -73,8 +73,8 @@ Sometimes you need to store multiple instances of the same component.
 
 To ensure a component keeps its own state, call the component's helper method with an `id` argument:
 
-   @myComponent 1
-   @myComponent 2
+    @myComponent 1
+    @myComponent 2
 
 ## Routes
 
