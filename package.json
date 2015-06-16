@@ -9,9 +9,15 @@
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "coffee-script": ""
+    "bluebird": "",
+    "coffee-mixin": "",
+    "coffee-script": "",
+    "mithril-node-render": ""
   },
   "devDependencies": {
-    "jasmine": ""
+    "express": "",
+    "jasmine": "",
+    "mithril": "",
+    "supertest": ""
   }
 }

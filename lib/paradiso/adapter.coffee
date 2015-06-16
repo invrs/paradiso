@@ -1,6 +1,6 @@
 module.exports =
   Component: require "./adapter/component"
-  Framework:
-    Mithril: require "./adapter/framework/mithril"
+  Render:
+    Mithril: require "./adapter/render/mithril"
   Server:
     Express: require "./adapter/server/express"

@@ -122,12 +122,11 @@ Its easy to make paradiso work with your favorite framework.
 
     Paradiso = require "paradiso"
 
-    Paradiso.adapters.mylib = class
-      constructor: ({ Component, Framework, @server }) ->
-        @component = new Component()
-      view: ->
-        @component.view()
-
-    new Paradiso(mylib: true)
-      .routes
-        "/": class view: "hello"
+    new Paradiso(
+      mylib: class
+        constructor: ({ Component, @render, @server }) ->
+          @component = new Component()
+        view: ->
+          @component.view()
+    ).routes
+      "/": class view: "hello"
