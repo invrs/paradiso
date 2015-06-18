@@ -1,6 +1,6 @@
 {
   "name": "paradiso",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A common way to write reactive and isomorphic apps on any js framework.",
   "main": "index.js",
   "scripts": {
