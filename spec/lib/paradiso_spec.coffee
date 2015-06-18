@@ -27,7 +27,10 @@ describe "Paradiso", ->
             
             view: ->
               if @server
-                "<html>#{@header()}</html>"
+                @HTML [
+                  @HEAD @TITLE @title
+                  @BODY @header()
+                ]
               else
                 @header()
 
@@ -36,7 +39,7 @@ describe "Paradiso", ->
 
       request(@iso.server.app)
         .get("/")
-        .expect(200, "hello")
+        .expect(200, "<html><head><title>Welcome</title></head><body>Hello, Joe</body></html>")
         .end (err, res) ->
           if err then throw err
           done()

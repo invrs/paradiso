@@ -31,26 +31,29 @@ Create `components/home.coffee`:
       constructor: ->
         @title = "Welcome"
 
-      view: -> @homeView()
+      view: ->
+        @homeView()
 
       HomeView: class
         constructor: ({ @title, @user }) ->
 
-        header: -> H1 "Hello, #{@user().login}"
+        header: ->
+          "Hello, #{@user().name}"
         
         view: ->
           if @server
-            HTML [
-              HEAD TITLE @title
-              BODY @header()
+            @HTML [
+              @HEAD @TITLE @title
+              @BODY @header()
             ]
           else
             @header()
 
       User: class
-        constructor: -> @name = "Joe"
+        constructor: ->
+          @name = "Joe"
 
-While somewhat of a contrived example, you can see how uni-directional data flow works with a traditional OOP model.
+While somewhat of a contrived example, you can see how uni-directional data flow works with traditional classes.
 
 #### Component basics
 

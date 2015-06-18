@@ -44,7 +44,10 @@ module.exports = class ComponentAdapter
 
       r: (args...) -> render.render args...
 
-    @Component = class extends multi Globals, Helpers, Component
+    Extensions =
+      multi Globals, Helpers, render.Component, Component
+
+    @Component = class extends Extensions
       constructor: -> super
       promises: []
     
