@@ -28,16 +28,12 @@ module.exports = class Waiter
       .all()
       .then(
         =>
-          added = length != @promises.length
-          empty = length == 0
-
-          if added || empty
+          if length != @promises.length
             @loop run_count
       )
 
-  @wait: (globals) ->
-    globals.promises = []
-    ring = new Waiter globals
+  @wait: (component) ->
+    ring = new Waiter component
     ring.wait()
 
   wait: ->

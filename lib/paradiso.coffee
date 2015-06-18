@@ -1,6 +1,9 @@
 Adapter = require "./paradiso/adapter"
 Waiter  = require "./paradiso/waiter"
 
+global.window ||= {}
+global.window.setTimeout ||= setTimeout
+
 module.exports = class Paradiso
 
   constructor: ({ @express, @mithril }) ->
@@ -20,23 +23,23 @@ module.exports = class Paradiso
 
     adapters
 
-  request: ({ Component, globals }) ->
-    { server } = globals
-    ended      = false
+  request: ({ Component, Globals }) ->
+    ended = false
 
-    Waiter.wait(globals).then (promises) =>
+    component =
+      new Adapter.Component({ Component, Globals, @render })
+      .component()
+
+    { server } = component
+
+    Waiter.wait(component).then (promises) =>
       return if ended
       ended = true
 
       if promises
-        server.end @render.view component.view globals
+        server.end @render.view component
       else
         server.status 500
-
-    component =
-      new Adapter.Component {
-        Component, globals, @render
-      }
 
     setTimeout(
       =>
@@ -44,14 +47,14 @@ module.exports = class Paradiso
         ended = true
 
         server.status 500
-        @resolveTimeout { Component, globals }
+        @resolveTimeout { Component, Globals }
       5000
     )
 
   routes: (routes={}) ->
     for path, Component of routes
       do (path, Component) =>
-        callback = (globals) =>
-          @request { Component, globals }
+        callback = (Globals) =>
+          @request { Component, Globals }
 
         @server.get { path, callback }

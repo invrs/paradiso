@@ -10,9 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "",
-    "coffee-mixin": "",
     "coffee-script": "",
-    "mithril-node-render": ""
+    "heterarchy": "",
+    "mithril-node-render": "",
+    "mithril.sugartags": ""
   },
   "devDependencies": {
     "express": "",

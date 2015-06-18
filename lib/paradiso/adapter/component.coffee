@@ -1,21 +1,37 @@
-mix = require("coffee-mixin")
+{ multi } = require "heterarchy"
 
-module.exports = class
-  constructor: ({ Component, @globals, @render }) ->
-    Mixin = class
-      buildHelper = ({ globals, Klass, fn_name, var_name }) ->
+module.exports = class ComponentAdapter
+  constructor: ({ Component, Globals, render }) ->
+    Helpers = class
+      constructor: ->
+        for name, Klass of @
+          do (name, Klass) =>
+            if name.match(/^[A-Z]/)
+              fn_name  = klassToFnName(name)
+              var_name = klassToVarName(name)
+
+              component = =>
+                new ComponentAdapter({
+                  Component: Klass, Globals, render
+                }).component(@)
+
+              @[fn_name] = buildHelper({
+                component, fn_name, var_name
+              })
+
+      buildHelper = ({ component, fn_name, var_name }) ->
         (args...) ->
           key = if typeof args[0] == "string"
             args.shift()
 
           if fn_name.match(/View$/)
-            new Klass(globals, args...).view()
+            component().view()
           else if key
-            @["#{var_name}_#{key}"] ||=
-              new Klass globals, args...
+            @_components ||= {}
+            @_components["#{var_name}_#{key}"] ||= component()
           else
-            @[var_name] ||=
-              new Klass globals, args...
+            @_components ||= {}
+            @_components[var_name] ||= component()
 
       klassToFnName = (name) ->
         name.charAt(0).toLowerCase() + name.slice(1)
@@ -26,22 +42,11 @@ module.exports = class
           .toLowerCase()
           .substring(1)
 
-      constructor: (globals, args...) ->
-        for name, Klass of @
-          do (name, Klass) =>
-            if name.match(/^[A-Z]/)
-              fn_name  = klassToFnName(name)
-              var_name = klassToVarName(name)
+      r: (args...) -> render.render args...
 
-              @[fn_name] = buildHelper {
-                globals, Klass, fn_name, var_name
-              }
-
-        super args...
-
-      r: (args...) -> @render.render args...
-
-    @Component = mix Component, Mixin
-
-  view: ->
-    new @Component(@globals).view()
+    @Component = class extends multi Globals, Helpers, Component
+      constructor: -> super
+      promises: []
+    
+  component: (options) ->
+    new @Component options

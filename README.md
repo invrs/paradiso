@@ -38,7 +38,7 @@ Create `components/home.coffee`:
 
         header: -> H1 "Hello, #{@user().login}"
         
-        view:
+        view: ->
           if @server
             HTML [
               HEAD TITLE @title

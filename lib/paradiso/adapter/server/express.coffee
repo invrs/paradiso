@@ -5,11 +5,12 @@ module.exports = class Express
 
   get: ({ callback, path }) ->
     @app.get path, (req, res, next) ->
-      callback(
+      Globals = class
         params: req.params
         server:
           status: (code) ->
             res.status(code).end()
           end: (response) ->
             res.end response
-      )
+      
+      callback Globals

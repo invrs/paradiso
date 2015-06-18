@@ -13,10 +13,30 @@ describe "Paradiso", ->
     it "works", (done) ->
       @iso.routes
         "/": class
-          view: "hello"
+          constructor: ->
+            @title = "Welcome"
+
+          view: ->
+            @homeView()
+
+          HomeView: class
+            constructor: ({ @title, @user }) ->
+
+            header: ->
+              "Hello, #{@user().name}"
+            
+            view: ->
+              if @server
+                "<html>#{@header()}</html>"
+              else
+                @header()
+
+          User: class
+            constructor: -> @name = "Joe"
+
       request(@iso.server.app)
         .get("/")
-        .expect(200)
+        .expect(200, "hello")
         .end (err, res) ->
-          # if err then return done(err)
-          # done()
+          if err then throw err
+          done()
