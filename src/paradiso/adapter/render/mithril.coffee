@@ -1,5 +1,5 @@
-sugartags = require "mithril.sugartags"
-Component = require "../component"
+sugartags        = require "mithril.sugartags"
+ComponentAdapter = require "../component"
 
 unless document?
   render = require "mithril-node-render"
@@ -13,7 +13,7 @@ module.exports = class
     Globals = @globals()
     render  = @
 
-    component = new Component({
+    component = new ComponentAdapter({
       Component, Globals, render
     }).component()
 
@@ -23,8 +23,9 @@ module.exports = class
   Component: class
 
   globals: ->
+    m = @mithril
     class
-      params: @mithril.route.param
+      params: m.route.param
 
   render: (force) ->
     @mithril.render force

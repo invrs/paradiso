@@ -4,10 +4,10 @@ Waiter           = require "./waiter"
 module.exports = class Express
 
   constructor: (express) ->
-    @app = express()
+    @express = express()
 
   get: ({ Component, path, render }) ->
-    @app.get path, (req, res, next) =>
+    @express.get path, (req, res, next) =>
       Globals = @globals { req, res }
 
       component = new ComponentAdapter({
