@@ -1,2 +1,2 @@
 require('coffee-script/register');
-require('./lib/paradiso');
+module.exports = require('./lib/paradiso');
