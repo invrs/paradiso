@@ -1,9 +1,12 @@
 { multi } = require "heterarchy"
 
 module.exports = class ComponentAdapter
-  constructor: ({ Component, Globals, render }) ->
+  constructor: ({ Component, @globals, render }) ->
     Helpers = class
-      constructor: ->
+      constructor: (options) ->
+        for key, value of options.globals
+          @[key] = value
+        
         for name, Klass of @
           do (name, Klass) =>
             if name.match(/^[A-Z]/)
@@ -11,9 +14,8 @@ module.exports = class ComponentAdapter
               var_name = klassToVarName(name)
 
               component = =>
-                new ComponentAdapter({
-                  Component: Klass, Globals, render
-                }).component(@)
+                new ComponentAdapter({ Component: Klass, render })
+                .component(@)
 
               @[fn_name] = buildHelper({
                 component, fn_name, var_name
@@ -45,7 +47,7 @@ module.exports = class ComponentAdapter
       r: (args...) -> render.render args...
 
     Extensions =
-      multi Globals, Helpers, render.Component, Component
+      multi Helpers, render.Component, Component
 
     @Component = class extends Extensions
       constructor: -> super

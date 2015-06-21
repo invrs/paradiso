@@ -8,24 +8,22 @@ module.exports = class Express
 
   get: ({ Component, path, render }) ->
     @express.get path, (req, res, next) =>
-      Globals = @globals { req, res }
+      globals = @globals { req, res }
 
-      component = new ComponentAdapter({
-        Component, Globals, render
-      }).component()
+      component = new ComponentAdapter({ Component, render })
+      .component({ globals })
 
-      @request { component, Globals, render }
+      @request { component, render }
 
   globals: ({ req, res }) ->
-    class
-      params: req.params
-      server:
-        status: (code) ->
-          res.status(code).end()
-        end: (response) ->
-          res.end response
+    params: req.params
+    server:
+      status: (code) ->
+        res.status(code).end()
+      end: (response) ->
+        res.end response
 
-  request: ({ component, Globals, render }) ->
+  request: ({ component, render }) ->
     ended      = false
     { server } = component
 
@@ -44,6 +42,6 @@ module.exports = class Express
         ended = true
 
         server.status 500
-        @resolveTimeout { component, Globals }
+        @resolveTimeout { component }
       5000
     )

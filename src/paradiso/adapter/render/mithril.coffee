@@ -10,12 +10,11 @@ module.exports = class
     sugartags @mithril, @Component.prototype
 
   component: ({ Component }) ->
-    Globals = @globals()
+    globals = @globals()
     render  = @
 
-    component = new ComponentAdapter({
-      Component, Globals, render
-    }).component()
+    component = new ComponentAdapter({Component, render })
+    .component({ globals })
 
     controller: -> component
     view:   (c) -> c.view()
@@ -24,8 +23,7 @@ module.exports = class
 
   globals: ->
     m = @mithril
-    class
-      params: m.route.param
+    params: m.route.param
 
   render: (force) ->
     @mithril.render force
