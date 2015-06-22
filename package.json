@@ -20,8 +20,8 @@
   "scripts": {
     "pretest": "npm run compile",
     "prepublish": "npm run compile",
-    "start": "npm run compile",
-    "test": "jasmine",
-    "compile": "coffee --compile --output lib/ src/"
+    "compile": "coffee --compile --output lib/ src/",
+    "start": "coffee -w --compile --output lib/ src/",
+    "test": "jasmine"
   }
 }
