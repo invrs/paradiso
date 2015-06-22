@@ -14,10 +14,11 @@ describe "Paradiso", ->
       @iso.routes
         "/": class
           constructor: ->
-            @title = "Welcome"
+            @title = @p "Welcome"
+            @user  = @p @userModel()
 
           view: ->
-            @homeView()
+            @homeView @
 
           HomeView: class
             constructor: ({ @title, @user }) ->
@@ -28,16 +29,16 @@ describe "Paradiso", ->
             view: ->
               if @server
                 @HTML [
-                  @HEAD @TITLE @title
+                  @HEAD @TITLE @title()
                   @BODY @header()
                 ]
               else
                 @header()
 
-          User: class
+          UserModel: class
             constructor: -> @name = "Joe"
 
-      request(@iso.server.app)
+      request(@iso.server.express)
         .get("/")
         .expect(200, "<html><head><title>Welcome</title></head><body>Hello, Joe</body></html>")
         .end (err, res) ->
