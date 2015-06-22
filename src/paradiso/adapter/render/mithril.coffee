@@ -16,12 +16,6 @@ module.exports = class
     m = @mithril
     params: m.route.param
 
-  prop: (args...) ->
-    @mithril.prop args...
-
-  redraw: (args...) ->
-    @mithril.redraw args...
-
   render: (args...) ->
     @mithril.render args...
 

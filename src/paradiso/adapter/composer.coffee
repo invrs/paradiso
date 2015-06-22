@@ -8,8 +8,14 @@ module.exports = class Composer
     F = require("./composer/mithril/sugartags")(options)
     G = options.Component
 
-    @Component = A extends
-      B extends C extends D extends E extends F extends G
+    @Component =
+      A extends
+      B extends
+      C extends
+      D extends
+      E extends
+      F extends
+      G
     
   component: (options={}) ->
     new @Component options

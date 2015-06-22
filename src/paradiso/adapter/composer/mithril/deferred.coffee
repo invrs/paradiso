@@ -1,5 +1,5 @@
 module.exports = ({ render }) ->
   class
     constructor: ->
-      @r = (args...) -> render.mithril.redraw args...
+      @d = (args...) -> render.mithril.deferred args...
       super
