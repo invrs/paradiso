@@ -1,25 +1,36 @@
-{ multi } = require "heterarchy"
-
 module.exports = class ComponentAdapter
-  constructor: ({ Component, @globals, render }) ->
+  constructor: ({ Component, render }) ->
     Helpers = class
       constructor: (options) ->
-        for key, value of options.globals
-          @[key] = value
-        
+        @globals = options.globals
+
         for name, Klass of @
           do (name, Klass) =>
             if name.match(/^[A-Z]/)
               fn_name  = klassToFnName(name)
               var_name = klassToVarName(name)
 
-              component = =>
+              component = (args...) =>
+                args[0] ||= {}
+                args[0].globals = @globals
+
                 new ComponentAdapter({ Component: Klass, render })
-                .component(@)
+                .component(args...)
 
               @[fn_name] = buildHelper({
                 component, fn_name, var_name
               })
+
+        for key, value of @globals
+          @[key] = value
+
+        for key, value of render.tags()
+          @[key] = value
+
+        @p = (args...) -> render.prop args...
+        @r = (args...) -> render.render args...
+
+        super
 
       buildHelper = ({ component, fn_name, var_name }) ->
         (args...) ->
@@ -27,13 +38,13 @@ module.exports = class ComponentAdapter
             args.shift()
 
           if fn_name.match(/View$/)
-            component().view()
+            component(args...).view()
           else if key
             @_components ||= {}
-            @_components["#{var_name}_#{key}"] ||= component()
+            @_components["#{var_name}_#{key}"] ||= component(args...)
           else
             @_components ||= {}
-            @_components[var_name] ||= component()
+            @_components[var_name] ||= component(args...)
 
       klassToFnName = (name) ->
         name.charAt(0).toLowerCase() + name.slice(1)
@@ -44,14 +55,14 @@ module.exports = class ComponentAdapter
           .toLowerCase()
           .substring(1)
 
-      r: (args...) -> render.render args...
+    A = Component
+    B = class
+      constructor: ->
+        @promises = []
+        super
+    C = Helpers
 
-    Extensions =
-      multi Helpers, render.Component, Component
-
-    @Component = class extends Extensions
-      constructor: -> super
-      promises: []
+    @Component = C extends B extends A
     
-  component: (options) ->
+  component: (options={}) ->
     new @Component options

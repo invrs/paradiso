@@ -7,30 +7,33 @@ unless document?
 module.exports = class
 
   constructor: (@mithril) ->
-    sugartags @mithril, @Component.prototype
-
+  
   component: ({ Component }) ->
     globals = @globals()
     render  = @
 
-    component = new ComponentAdapter({Component, render })
+    component = new ComponentAdapter({ Component, render })
     .component({ globals })
 
     controller: -> component
     view:   (c) -> c.view()
 
-  Component: class
-
   globals: ->
     m = @mithril
     params: m.route.param
 
-  render: (force) ->
-    @mithril.render force
+  prop: (args...) ->
+    @mithril.prop args...
+
+  render: (args...) ->
+    @mithril.render args...
 
   routes: (routes) ->
     if document?
       @mithril.route document.body, "/", routes
+
+  tags: ->
+    sugartags @mithril, {}
 
   view: (component) ->
     if document?
