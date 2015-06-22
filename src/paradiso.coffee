@@ -1,6 +1,6 @@
-Adapter = require "./paradiso/adapter/component"
-Server  = require "./paradiso/adapter/server"
-Render  = require "./paradiso/adapter/render"
+Composer = require "./paradiso/adapter/composer"
+Server   = require "./paradiso/adapter/server"
+Render   = require "./paradiso/adapter/render"
 
 global.window ||= {}
 global.window.setTimeout ||= setTimeout
@@ -25,12 +25,14 @@ module.exports = class Paradiso
     adapters
 
   route: ({ Component, path }) ->
-    adapter = new Adapter { Component, @render }
+    composer = new Composer {
+      Component, path, @render, @server, @timeout
+    }
 
     if @server
-      @server.get { adapter, path, @render }
+      @server.get { composer, path, @render }
     else
-      @render.component adapter
+      @render.component composer
 
   routes: (routes={}) ->
     for path, Component of routes

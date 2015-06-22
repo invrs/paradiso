@@ -1,6 +1,3 @@
-sugartags        = require "mithril.sugartags"
-ComponentAdapter = require "../component"
-
 unless document?
   render = require "#{""}mithril-node-render"
 
@@ -8,9 +5,9 @@ module.exports = class
 
   constructor: (@mithril) ->
 
-  component: (adapter) ->
+  component: (composer) ->
     globals   = @globals()
-    component = adapter.component { globals }
+    component = composer.component { globals }
 
     controller: -> component
     view:   (c) -> c.view()
@@ -31,9 +28,6 @@ module.exports = class
   routes: (routes) ->
     if document?
       @mithril.route document.body, "/", routes
-
-  tags: ->
-    sugartags @mithril, {}
 
   view: (component) ->
     if document?

@@ -5,10 +5,10 @@ module.exports = class Express
   constructor: (express) ->
     @express = express()
 
-  get: ({ adapter, path, render }) ->
+  get: ({ composer, path, render }) ->
     @express.get path, (req, res, next) =>
       globals   = @globals { req, res }
-      component = adapter.component { globals }
+      component = composer.component { globals }
 
       @request { component, render }
 
