@@ -25,6 +25,9 @@ module.exports = class
   prop: (args...) ->
     @mithril.prop args...
 
+  redraw: (args...) ->
+    @mithril.redraw args...
+
   render: (args...) ->
     @mithril.render args...
 
