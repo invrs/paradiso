@@ -1,17 +1,14 @@
-ComponentAdapter = require "../component"
-Waiter           = require "./waiter"
+Waiter = require "./waiter"
 
 module.exports = class Express
 
   constructor: (express) ->
     @express = express()
 
-  get: ({ Component, path, render }) ->
+  get: ({ adapter, path, render }) ->
     @express.get path, (req, res, next) =>
-      globals = @globals { req, res }
-
-      component = new ComponentAdapter({ Component, render })
-      .component({ globals })
+      globals   = @globals { req, res }
+      component = adapter.component { globals }
 
       @request { component, render }
 

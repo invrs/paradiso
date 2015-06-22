@@ -7,13 +7,10 @@ unless document?
 module.exports = class
 
   constructor: (@mithril) ->
-  
-  component: ({ Component }) ->
-    globals = @globals()
-    render  = @
 
-    component = new ComponentAdapter({ Component, render })
-    .component({ globals })
+  component: (adapter) ->
+    globals   = @globals()
+    component = adapter.component { globals }
 
     controller: -> component
     view:   (c) -> c.view()

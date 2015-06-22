@@ -1,5 +1,6 @@
-module.exports = class ComponentAdapter
+module.exports = class Adapter
   constructor: ({ Component, render }) ->
+
     Helpers = class
       constructor: (options) ->
         @globals = options.globals
@@ -10,16 +11,11 @@ module.exports = class ComponentAdapter
               fn_name  = klassToFnName(name)
               var_name = klassToVarName(name)
 
-              component = (args...) =>
-                args[0] ||= {}
-                args[0].globals = @globals
+              adapter = new Adapter { Component: Klass, render }
 
-                new ComponentAdapter({ Component: Klass, render })
-                .component(args...)
-
-              @[fn_name] = buildHelper({
-                component, fn_name, var_name
-              })
+              @[fn_name] = buildHelper {
+                adapter, fn_name, var_name
+              }
 
         for key, value of @globals
           @[key] = value
@@ -32,10 +28,15 @@ module.exports = class ComponentAdapter
 
         super
 
-      buildHelper = ({ component, fn_name, var_name }) ->
+      buildHelper = ({ adapter, fn_name, var_name }) ->
         (args...) ->
           key = if typeof args[0] == "string"
             args.shift()
+
+          args[0]       ||= {}
+          args[0].globals = @globals
+
+          component = adapter.component.bind(adapter)
 
           if fn_name.match(/View$/)
             component(args...).view()
@@ -54,12 +55,14 @@ module.exports = class ComponentAdapter
           .replace(/([A-Z])/g, "_$1")
           .toLowerCase()
           .substring(1)
-
+    
     A = Component
+
     B = class
       constructor: ->
         @promises = []
         super
+    
     C = Helpers
 
     @Component = C extends B extends A
