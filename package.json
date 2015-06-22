@@ -7,7 +7,6 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "",
-    "heterarchy": "",
     "mithril-node-render": "",
     "mithril.sugartags": ""
   },

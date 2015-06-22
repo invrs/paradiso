@@ -2,7 +2,7 @@ sugartags        = require "mithril.sugartags"
 ComponentAdapter = require "../component"
 
 unless document?
-  render = require "mithril-node-render"
+  render = require "#{""}mithril-node-render"
 
 module.exports = class
 
