@@ -3,21 +3,20 @@ module.exports = class Adapter
 
     Helpers = class
       constructor: (options) ->
-        @globals = options.globals
+        @_globals = options.globals
 
         for name, Klass of @
           do (name, Klass) =>
             if name.match(/^[A-Z]/)
               fn_name  = klassToFnName(name)
               var_name = klassToVarName(name)
-
-              adapter = new Adapter { Component: Klass, render }
+              adapter  = new Adapter { Component: Klass, render }
 
               @[fn_name] = buildHelper {
                 adapter, fn_name, var_name
               }
 
-        for key, value of @globals
+        for key, value of @_globals
           @[key] = value
 
         for key, value of render.tags()
@@ -34,7 +33,7 @@ module.exports = class Adapter
             args.shift()
 
           args[0]       ||= {}
-          args[0].globals = @globals
+          args[0].globals = @_globals
 
           component = adapter.component.bind(adapter)
 
