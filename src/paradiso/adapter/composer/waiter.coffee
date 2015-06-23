@@ -1,5 +1,5 @@
 module.exports = ->
   class
     constructor: ->
-      @promises = []
+      @_promises = []
       super

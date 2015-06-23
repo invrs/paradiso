@@ -11,10 +11,10 @@ Promise = require "bluebird"
 # period, it waits for all promises to resolve.
 #
 module.exports = class Waiter
-  constructor: ({ @promises }) ->
+  constructor: ({ @_promises }) ->
 
   loop: (run_count=0) ->
-    length = @promises.length
+    length = @_promises.length
     
     Promise
       .delay(10)
@@ -23,12 +23,12 @@ module.exports = class Waiter
           return [] if run_count > 500
           run_count += 1
 
-          @promises
+          @_promises
       )
       .all()
       .then(
         =>
-          if length != @promises.length
+          if length != @_promises.length
             @loop run_count
       )
 
@@ -38,6 +38,6 @@ module.exports = class Waiter
 
   wait: ->
     @loop().then(
-      => @promises
+      => @_promises
       => false
     )
