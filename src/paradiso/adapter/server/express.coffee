@@ -34,6 +34,7 @@ module.exports = class Express
         server.end render.view component
       else
         server.status 500
+        @rejected { component } if @rejected
 
     setTimeout(
       =>
