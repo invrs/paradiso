@@ -7,27 +7,39 @@ global.window.setTimeout ||= setTimeout
 
 module.exports = class Paradiso
 
-  constructor: ({ @express, @mithril }) ->
-    @timeout = new Promise (@resolveTimeout) =>
-    { @render, @server } = @adapters()
+  constructor: (libs) ->
+    @libs = @adapters libs
+    { @render, @server } = @libs
 
-  adapters: ->
+  adapters: (libs) ->
     adapters = {}
 
-    if @express
-      adapters.server =
-        new Server.Express @express
+    for name, lib of libs
+      do (name, lib) =>
+        switch name
+          when "express"
+            adapters.server =
+              new Server.Express lib
 
-    if @mithril
-      adapters.render =
-        new Render.Mithril @mithril
+          when "mithril"
+            adapters.render =
+              new Render.Mithril lib
+
+          else
+            adapters[name] = lib
 
     adapters
 
   route: ({ Component, path }) ->
-    composer = new Composer {
-      Component, path, @render, @server, @timeout
-    }
+    if typeof Component == "object"
+      adapter  = Object.keys(Component)[0]
+      composer = new @libs[adapter] {
+        Component: Component[adapter], path, @render, @server
+      }
+    else
+      composer = new Composer {
+        Component, path, @render, @server
+      }
 
     if @server
       @server.get { composer, path, @render }
