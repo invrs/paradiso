@@ -15,6 +15,8 @@ module.exports = class Express
   globals: ({ req, res }) ->
     params: req.params
     server:
+      req: req
+      res: res
       status: (code) ->
         res.status(code).end()
       end: (response) ->
@@ -39,6 +41,6 @@ module.exports = class Express
         ended = true
 
         server.status 500
-        @resolveTimeout { component }
+        @timeout { component } if @timeout
       5000
     )
