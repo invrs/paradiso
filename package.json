@@ -1,6 +1,6 @@
 {
   "name": "paradiso",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A common way to write reactive and isomorphic apps on any js framework.",
   "main": "lib/paradiso.js",
   "author": "Winton Welsh <winton@cyclo.ps>",
