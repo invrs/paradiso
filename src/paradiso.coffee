@@ -1,6 +1,4 @@
 Composer = require "./paradiso/adapter/composer"
-Server   = require "./paradiso/adapter/server"
-Render   = require "./paradiso/adapter/render"
 
 global.window ||= {}
 global.window.setTimeout ||= setTimeout
@@ -18,10 +16,12 @@ module.exports = class Paradiso
       do (name, lib) =>
         switch name
           when "express"
+            Server = require "#{""}./paradiso/adapter/server"
             adapters.server =
               new Server.Express lib
 
           when "mithril"
+            Render = require "./paradiso/adapter/render"
             adapters.render =
               new Render.Mithril lib
 
