@@ -1,55 +1,27 @@
-Composer = require "./paradiso/adapter/composer"
-
 global.window ||= {}
 global.window.setTimeout ||= setTimeout
+
+Adapters = require "./paradiso/adapters"
 
 module.exports = class Paradiso
 
   constructor: (libs) ->
-    @libs = @adapters libs
-    { @render, @server } = @libs
-
-  adapters: (libs) ->
-    adapters = {}
-
-    for name, lib of libs
-      do (name, lib) =>
-        switch name
-          when "express"
-            Server = require "#{""}./paradiso/adapter/server"
-            adapters.server =
-              new Server.Express lib
-
-          when "mithril"
-            Render = require "./paradiso/adapter/render"
-            adapters.render =
-              new Render.Mithril lib
-
-          else
-            adapters[name] = lib
-
-    adapters
+    @adapters = new Adapters libs
 
   route: ({ Component, path }) ->
-    if typeof Component == "object"
-      adapter  = Object.keys(Component)[0]
-      composer = new @libs[adapter] {
-        Component: Component[adapter], path, @render, @server
-      }
-    else
-      composer = new Composer {
-        Component, path, @render, @server
-      }
+    composer = @adapters.composer { Component, path }
 
-    if @server
-      @server.get { composer, path, @render }
+    if @adapters.server
+      @server.get { composer, path, render: @adapters.render }
     else
-      @render.component composer
+      @adapters.render.component composer
+
+    @
 
   routes: (routes={}) ->
     for path, Component of routes
       do (path, Component) =>
         routes[path] = @route { Component, path }
 
-    @render.routes routes
+    @adapters.render.routes routes
     @
