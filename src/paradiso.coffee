@@ -7,14 +7,17 @@ module.exports = class Paradiso
 
   constructor: (libs) ->
     @adapters = new Adapters libs
+    { @render, @server } = @adapters
 
   route: ({ Component, path }) ->
     composer = @adapters.composer { Component, path }
 
-    if @adapters.server
-      @server.get { composer, path, render: @adapters.render }
+    if @server
+      @server.get {
+        composer, path, render: @adapters.render
+      }
     else
-      @adapters.render.component composer
+      @render.component composer
 
     @
 
@@ -23,5 +26,5 @@ module.exports = class Paradiso
       do (path, Component) =>
         routes[path] = @route { Component, path }
 
-    @adapters.render.routes routes
+    @render.routes routes
     @

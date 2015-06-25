@@ -9,8 +9,9 @@ module.exports = (compose_options) ->
             fn_name  = klassToFnName(name)
             var_name = klassToVarName(name)
 
-            compose_options.Component = Component
-            composer = new Composer compose_options
+            composer = compose_options.adapters.composer {
+              Component
+            }
 
             @[fn_name] = buildHelper {
               composer, fn_name, var_name

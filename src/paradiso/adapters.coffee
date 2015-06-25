@@ -1,4 +1,4 @@
-Composer = require "./paradiso/adapter/composer"
+Composer = require "./adapters/composer"
 
 module.exports = class
   constructor: (libs) ->
@@ -6,11 +6,11 @@ module.exports = class
       do (name, lib) =>
         switch name
           when "express"
-            Server  = require "#{""}./paradiso/adapter/server"
+            Server  = require "#{""}./adapters/server"
             @server = new Server.Express lib
 
           when "mithril"
-            Render  = require "./paradiso/adapter/render"
+            Render  = require "./adapters/render"
             @render = new Render.Mithril lib
 
           else
@@ -20,9 +20,17 @@ module.exports = class
     if typeof Component == "object"
       adapter = Object.keys(Component)[0]
       new @[adapter] {
-        Component: Component[adapter], path, @render, @server
+        adapters:  @
+        Component: Component[adapter]
+        path
+        @render
+        @server
       }
     else
       new Composer {
-        Component, path, @render, @server
+        adapters:  @
+        Component
+        path
+        @render
+        @server
       }
