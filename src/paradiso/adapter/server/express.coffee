@@ -7,7 +7,7 @@ module.exports = class Express
 
   get: ({ composer, path, render }) ->
     @express.get path, (req, res, next) =>
-      res.type "html"
+      res.type composer.Component.response_type || "html"
 
       globals   = @globals { req, res }
       component = composer.component { globals }
