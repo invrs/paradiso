@@ -9,6 +9,9 @@ module.exports = class
             Server  = require "#{""}./adapters/server"
             @server = new Server.Express lib
 
+          when "extensions"
+            @extensions = lib
+
           when "mithril"
             Render  = require "./adapters/render"
             @render = new Render.Mithril lib
@@ -22,6 +25,7 @@ module.exports = class
       new @[adapter] {
         adapters:  @
         Component: Component[adapter]
+        @extensions
         path
         @render
         @server
@@ -30,6 +34,7 @@ module.exports = class
       new Composer {
         adapters:  @
         Component
+        @extensions
         path
         @render
         @server

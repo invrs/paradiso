@@ -19,8 +19,6 @@ module.exports = class Paradiso
     else
       @render.component composer
 
-    @
-
   routes: (routes={}) ->
     for path, Component of routes
       do (path, Component) =>

@@ -6,7 +6,14 @@ module.exports = class Composer
     D = require("./composer/mithril/prop")(options)
     E = require("./composer/mithril/redraw")(options)
     F = require("./composer/mithril/sugartags")(options)
-    G = options.Component
+    
+    if options.extensions
+      G = options.extensions(options)
+    else
+      G = class
+        constructor: -> super
+        
+    H = options.Component
 
     @Component =
       A extends
@@ -15,7 +22,8 @@ module.exports = class Composer
       D extends
       E extends
       F extends
-      G
+      G extends
+      H
     
   component: (options={}) ->
     new @Component options
