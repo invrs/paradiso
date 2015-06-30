@@ -28,17 +28,25 @@ Paradiso does not prescribe a specific file or directory naming pattern. This is
 
 The `app/initializers` directory includes:
  
+* A file to configure the js asset build (`build.coffee`)
 * A file for each client js asset (`client.coffee`)
 * A file to define routes for client and server (`routes.coffee`)
 * A file that boots the web server (`server.coffee`)
 
-#### Route initializer
+#### Build initializer
 
-`app/initializers/routes.coffee`:
+`app/initializers/build.coffee`:
 
 ```coffee
-module.exports =
-  "/": require "../components/home/route.coffee"
+Paradiso   = require "paradiso"
+browserify = require "paradiso-build-browserify"
+coffeeify  = require "paradiso-build-coffeeify"
+envify     = require "paradiso-build-envify"
+uglify     = require "paradiso-build-uglify"
+routes     = require "./routes"
+
+module.exports = ->
+  new Paradiso build: [ coffeeify, envify, browserify, uglify ]
 ```
 
 #### Client initializer
@@ -51,7 +59,17 @@ component = require "paradiso-component"
 render    = require "paradiso-render-mithril"
 routes    = require "./routes"
 
-new Paradiso({ component, render, routes })
+module.exports = ->
+  new Paradiso { component, render, routes }
+```
+
+#### Route initializer
+
+`app/initializers/routes.coffee`:
+
+```coffee
+module.exports = ->
+  "/": require "../components/home/route.coffee"
 ```
 
 #### Server initializer
@@ -61,27 +79,28 @@ new Paradiso({ component, render, routes })
 ```coffee
 Paradiso = require "paradiso"
 render   = require "paradiso-render-mithril"
-routes   = require "./routes"
 server   = require "paradiso-server-express"
+routes   = require "./routes"
 
-iso = new Paradiso({ component, render, routes, server })
+module.exports = ->
+  iso = new Paradiso { component, render, routes, server }
 
-# Express-specific code
-#
-app = iso.express.app
-exp = iso.express.lib
+  # Express-specific code
+  #
+  app = iso.express.app
+  exp = iso.express.lib
 
-app.use exp.static "dist"
+  app.use exp.static "dist"
 
-app.listen 9000, ->
-  console.log "Server started at http://127.0.0.1:9000"
+  app.listen 9000, ->
+    console.log "Server started at http://127.0.0.1:9000"
 ```
 
 ### Adapters
 
-You may be wondering, "What are `paradiso-component`, `paradiso-server-express`, and `paradiso-render-mithril`? Why are they separate libraries?"
+You may be wondering, "What are these `paradiso-` libraries? Why are they separate?"
 
-Paradiso composes your stack using adapters, meaning you can easily switch your rendering engine, server, or component style at any time.
+Paradiso composes your stack using adapters, meaning you can easily change your build, rendering engine, server, or component style at any time.
 
 Later we will discuss writing and modifying adapters, but for now let's stick to building the app.
 
@@ -96,3 +115,22 @@ module.exports = class
 
   view: -> "hello!"
 ```
+
+### Build assets
+
+Run your build initializer to build the client js assets:
+
+    coffee -e "require('./app/initializers/build')()"
+
+You can also use a gulp task:
+
+```coffee
+gulp  = require "gulp"
+build = require "./app/initializers/build"
+
+gulp.task "build", -> build().promise
+```
+
+### Start server
+
+    coffee -e "require('./app/initializers/server')()"
