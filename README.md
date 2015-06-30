@@ -15,9 +15,11 @@ Support for `express`, `mithril`, and `react` out of the box.
 To start, we will create the following directory structure:
 
     app/
-      components/home/
-        route.coffee
+      components/
+        home/
+          route.coffee
       initializers/
+        build.coffee
         client.coffee
         routes.coffee
         server.coffee
@@ -106,7 +108,7 @@ Later we will discuss writing and modifying adapters, but for now let's stick to
 
 ### Components
 
-Here is the simplest way to define a component using `paradiso-component`:
+Here is the simplest way to define a component using the `paradiso-component` adapter style:
 
 `components/home/route.coffee`:
 
@@ -120,7 +122,9 @@ module.exports = class
 
 Run your build initializer to build the client js assets:
 
-    coffee -e "require('./app/initializers/build')()"
+```bash
+coffee -e "require('./app/initializers/build')()"
+```
 
 You can also use a gulp task:
 
@@ -133,4 +137,6 @@ gulp.task "build", -> build().promise
 
 ### Start server
 
-    coffee -e "require('./app/initializers/server')()"
+```bash
+coffee -e "require('./app/initializers/server')()"
+```
