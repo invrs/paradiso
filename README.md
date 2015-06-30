@@ -23,131 +23,81 @@ Easy to write adapters for your favorite framework.
 
 * express
 
-## Components
+## Structure
 
-Create `components/home.coffee`:
+To start, we will create the following directory structure:
+
+    app/
+      components/home/
+        route.coffee
+      initializers/
+        client.coffee
+        routes.coffee
+        server.coffee
+
+Paradiso does not prescribe a specific file or directory naming pattern. This is just an example.
+
+### Initializers
+
+The `app/initializers` directory includes:
+ 
+* A file for each client js asset (`client.coffee`)
+* A file to define routes for client and server (`routes.coffee`)
+* A file that boots the web server (`server.coffee`)
+
+#### Route initializer
+
+`app/initializers/routes.coffee`:
+
+    module.exports =
+      "/": require "../components/home/route.coffee"
+
+#### Client initializer
+
+`app/initializers/client.coffee`:
+
+    Paradiso  = require "paradiso"
+    component = require "paradiso-component"
+    render    = require "paradiso-render-mithril"
+    routes    = require "./routes"
+
+    new Paradiso({ component, render, routes })
+
+#### Server initializer
+
+`app/initializers/server.coffee`: 
+
+    Paradiso = require "paradiso"
+    render   = require "paradiso-render-mithril"
+    routes   = require "./routes"
+    server   = require "paradiso-server-express"
+
+    iso = new Paradiso({ component, render, routes, server })
+
+    # Express-specific code
+    #
+    app = iso.express.app
+    exp = iso.express.lib
+
+    app.use exp.static "dist"
+
+    app.listen 9000, ->
+      console.log "Server started at http://127.0.0.1:9000"
+
+### Adapters
+
+You may be wondering, "What are `paradiso-component`, `paradiso-server-express`, and `paradiso-render-mithril`? Why are they separate libraries?"
+
+Paradiso was built to be adapter-based, meaning you can easily switch your rendering engine, server, or component style at any time.
+
+Later we will discuss writing your own adapters, but for now let's stick to building the app.
+
+### Components
+
+Here is the simplest way to define a component using `paradiso-component`:
+
+`components/home/route.coffee`:
 
     module.exports = class
-      constructor: ->
-        @title = "Welcome"
 
-      view: ->
-        @homeView()
-
-      HomeView: class
-        constructor: ({ @title, @user }) ->
-
-        header: ->
-          "Hello, #{@user().name}"
-        
-        view: ->
-          if @server
-            @HTML [
-              @HEAD @TITLE @title
-              @BODY @header()
-            ]
-          else
-            @header()
-
-      User: class
-        constructor: ->
-          @name = "Joe"
-
-While somewhat of a contrived example, you can see how uni-directional data flow works with traditional classes.
-
-#### Component basics
-
-* Components typically have a `view` function
-* The `@params` object is always present and holds route parameters
-* If you have a promise that needs resolution before the server should render your views, push it to `@promises`
-* The `@server` variable exists when rendering server side
-
-#### Helper functions
-
-When you define a component within a component (`User`), Paradiso generates a helper method (`@user`) to accompany it.
-
-Calling the `@user()` helper method creates an instance of the `User` component and keeps a reference to it next time you call it.
-
-#### Stateful vs stateless
-
-If a component is stateful, that means its class instance variables maintain state across multiple renders.
-
-Renders don't just occur when you visit a new URL. They can happen repeatedly as dynamic actions take place.
-
-#### View components
-
-Name your view components with the word `View` at the end of it (`HomeView`).
-
-View classes are stateless. View classes only exist for the lifetime of a single render.
-
-The helper function knows not to preserve state on View components. It also knows to automatically call the `view` function and return its result on View classes.
-
-#### Similar components
-
-Sometimes you need to store multiple instances of the same stateful component.
-
-To ensure a component keeps its own distinct state, call the component's helper method with an `id` argument:
-
-    @myComponent 1
-    @myComponent 2
-
-## Routes
-
-Create `routes.coffee`:
-
-    module.exports =
-      "/": require "./components/home"
-
-## Client
-
-Create `client.coffee`:
-
-    Paradiso = require "paradiso"
-
-    new Paradiso
-      # Framework (uncomment one):
-      #
-      # mithril: require "mithril"
-      # react:   require "react"
-
-    .routes require "./routes"
-
-## Server
-
-Create `server.coffee`:
-
-    Paradiso = require "paradiso"
-
-    new Paradiso
-      # Web server:
-      #
-      express: require "express"
-
-      # Framework (uncomment one):
-      #
-      # mithril: require "mithril"
-      # react:   require "react"
-
-    .routes require "./routes"
-
-## Start the server
-
-You should now have the following files:
-
-* `component/home.coffee`
-* `routes.coffee`
-* `client.coffee`
-* `server.coffee`
-
-Now start the server:
-
-    coffee server.coffee
-
-## Converting your project
-
-Paradiso allows you to mix and match between common and framework-specific component styles while you convert your project.
-
-Just specify the style in the route:
-
-    module.exports =
-      "/": mithril: require "./components/home"
+      view: -> "hello!"
