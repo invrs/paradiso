@@ -10,9 +10,9 @@ Provides a default component style that aims to be more traditionally object-ori
 
 Support for `express`, `mithril`, and `react` out of the box.
 
-## Structure
+## Getting started
 
-To start, we will create the following directory structure:
+Let's create the following directory structure:
 
     app/
       components/
@@ -24,7 +24,7 @@ To start, we will create the following directory structure:
         routes.coffee
         server.coffee
 
-Paradiso does not prescribe a specific file or directory naming pattern. This is just a suggestion.
+(**Protip**: Feel free to name your files how you like; Paradiso is unopinionated.)
 
 ### Initializers
 
@@ -48,9 +48,13 @@ uglify     = require "paradiso-build-uglify"
 routes     = require "./routes"
 
 module.exports = ->
-  new Paradiso build: [ coffeeify, envify, browserify, uglify ]
-    .build "./app/initializers/client"
+  build = [ coffeeify, envify, browserify, uglify ]
+
+  new Paradiso({ build }).build
+    "./public": "./app/initializers/client"
 ```
+
+(**Protip**: You can have multiple client assets, just use an array of filenames.)
 
 #### Client initializer
 
@@ -86,22 +90,16 @@ server   = require "paradiso-server-express"
 routes   = require "./routes"
 
 module.exports = ->
-  server = new Paradiso { component, render, routes, server }
-    .server()
+  server = new Paradiso({ component, render, routes, server }).server()
 
   # Express-specific code
   #
-  app = server.app
-  exp = server.lib
+  server.then ({ app, lib }) ->
 
-  app.use exp.static "dist"
+    app.use lib.static "public"
 
-  app.listen 9000, ->
-    console.log "Server started at http://127.0.0.1:9000"
-
-  # Return the server
-  #
-  server
+    app.listen 9000, ->
+      console.log "Server started at http://127.0.0.1:9000"
 ```
 
 ### Adapters
@@ -126,23 +124,34 @@ module.exports = class
 
 ### Build assets
 
-Run your build initializer to build the client js assets:
+Now your project should resemble [step 1 of the example project](https://github.com/invrs/paradiso-example/tree/step-1).
+
+Run your build initializer to build the client js asset:
 
 ```bash
 coffee -e "require('./app/initializers/build')()"
 ```
 
-You can also use a gulp task:
+Or use gulp:
 
 ```coffee
 gulp  = require "gulp"
 build = require "./app/initializers/build"
 
-gulp.task "build", -> build().promise
+gulp.task "build", -> build()
 ```
 
 ### Start server
 
 ```bash
 coffee -e "require('./app/initializers/server')()"
+```
+
+Or use gulp:
+
+```coffee
+gulp  = require "gulp"
+build = require "./app/initializers/server"
+
+gulp.task "server", -> server()
 ```
