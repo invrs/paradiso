@@ -31,6 +31,9 @@ module.exports = (compose_options) ->
         args[0].globals = @globals
 
         component = composer.component.bind(composer)
+
+        if fn_name.match(/View$/)
+          return component(args...).view()
         
         if key
           id = "#{var_name}_#{key}"
