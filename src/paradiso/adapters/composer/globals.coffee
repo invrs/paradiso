@@ -1,10 +1,10 @@
 module.exports = ->
   class
     constructor: (options) ->
-      if options.globals
-        @globals = options.globals
+      if options._globals
+        @_globals = options._globals
 
-        for key, value of @globals
+        for key, value of @_globals
           @[key] = value
 
       super

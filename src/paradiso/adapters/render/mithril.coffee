@@ -6,9 +6,9 @@ module.exports = class
   constructor: (@mithril) ->
 
   component: (composer) ->
-    globals = @globals()
+    _globals = @globals()
 
-    controller: -> composer.component { globals }
+    controller: -> composer.component { _globals }
     view:   (c) -> c.view()
 
   globals: ->

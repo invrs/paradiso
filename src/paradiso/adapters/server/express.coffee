@@ -9,8 +9,8 @@ module.exports = class Express
     @express.get path, (req, res, next) =>
       res.type composer.Component.response_type || "html"
 
-      globals   = @globals { req, res }
-      component = composer.component { globals }
+      _globals  = @globals { req, res }
+      component = composer.component { _globals }
 
       @request { component, render }
 

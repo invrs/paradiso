@@ -27,8 +27,8 @@ module.exports = (compose_options) ->
         key = if typeof args[0] == "string"
           args.shift()
 
-        args[0]       ||= {}
-        args[0].globals = @globals
+        args[0]        ||= {}
+        args[0]._globals = @_globals
 
         component = composer.component.bind(composer)
 
