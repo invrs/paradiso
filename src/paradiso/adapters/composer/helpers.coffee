@@ -13,6 +13,9 @@ module.exports = (compose_options) ->
               Component
             }
 
+            @[name] = (args...) ->
+              composer.component(args...)
+
             @[fn_name] = buildHelper {
               composer, fn_name, var_name
             }
@@ -25,18 +28,24 @@ module.exports = (compose_options) ->
           args.shift()
 
         args[0]       ||= {}
-        args[0].globals = @_globals
+        args[0].globals = @globals
 
         component = composer.component.bind(composer)
-
-        if fn_name.match(/View$/)
-          component(args...).view()
-        else if key
-          @_components ||= {}
-          @_components["#{var_name}_#{key}"] ||= component(args...)
+        
+        if key
+          id = "#{var_name}_#{key}"
         else
-          @_components ||= {}
-          @_components[var_name] ||= component(args...)
+          id = var_name
+
+        @_components ||= {}
+
+        if @_components[id]
+          for k, v of args[0]
+            @_components[id][k] = v
+        else
+          @_components[id] = component(args...)
+
+        @_components[id]
 
     klassToFnName = (name) ->
       name.charAt(0).toLowerCase() + name.slice(1)
