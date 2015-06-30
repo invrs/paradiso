@@ -1,10 +1,10 @@
 # Paradiso
 
-A common way to write reactive and isomorphic apps on any js framework.
+An adapter-based way to write isomorphic applications. Change frameworks like what.
 
 ## Features
 
-Write adapters for all pieces of your isomorphic stack: components, DOM rendering, and web servers.
+Adapters for all pieces of your isomorphic stack (components, DOM rendering, and web servers).
 
 Provides a default component style that aims to be more traditionally object-oriented and extendable.
 
@@ -36,48 +36,54 @@ The `app/initializers` directory includes:
 
 `app/initializers/routes.coffee`:
 
-    module.exports =
-      "/": require "../components/home/route.coffee"
+```coffee
+module.exports =
+  "/": require "../components/home/route.coffee"
+```
 
 #### Client initializer
 
 `app/initializers/client.coffee`:
 
-    Paradiso  = require "paradiso"
-    component = require "paradiso-component"
-    render    = require "paradiso-render-mithril"
-    routes    = require "./routes"
+```coffee
+Paradiso  = require "paradiso"
+component = require "paradiso-component"
+render    = require "paradiso-render-mithril"
+routes    = require "./routes"
 
-    new Paradiso({ component, render, routes })
+new Paradiso({ component, render, routes })
+```
 
 #### Server initializer
 
 `app/initializers/server.coffee`: 
 
-    Paradiso = require "paradiso"
-    render   = require "paradiso-render-mithril"
-    routes   = require "./routes"
-    server   = require "paradiso-server-express"
+```coffee
+Paradiso = require "paradiso"
+render   = require "paradiso-render-mithril"
+routes   = require "./routes"
+server   = require "paradiso-server-express"
 
-    iso = new Paradiso({ component, render, routes, server })
+iso = new Paradiso({ component, render, routes, server })
 
-    # Express-specific code
-    #
-    app = iso.express.app
-    exp = iso.express.lib
+# Express-specific code
+#
+app = iso.express.app
+exp = iso.express.lib
 
-    app.use exp.static "dist"
+app.use exp.static "dist"
 
-    app.listen 9000, ->
-      console.log "Server started at http://127.0.0.1:9000"
+app.listen 9000, ->
+  console.log "Server started at http://127.0.0.1:9000"
+```
 
 ### Adapters
 
 You may be wondering, "What are `paradiso-component`, `paradiso-server-express`, and `paradiso-render-mithril`? Why are they separate libraries?"
 
-Paradiso was built to be adapter-based, meaning you can easily switch your rendering engine, server, or component style at any time.
+Paradiso composes your stack using adapters, meaning you can easily switch your rendering engine, server, or component style at any time.
 
-Later we will discuss writing your own adapters, but for now let's stick to building the app.
+Later we will discuss writing and modifying adapters, but for now let's stick to building the app.
 
 ### Components
 
@@ -85,6 +91,8 @@ Here is the simplest way to define a component using `paradiso-component`:
 
 `components/home/route.coffee`:
 
-    module.exports = class
+```coffee
+module.exports = class
 
-      view: -> "hello!"
+  view: -> "hello!"
+```
