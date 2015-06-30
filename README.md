@@ -49,6 +49,7 @@ routes     = require "./routes"
 
 module.exports = ->
   new Paradiso build: [ coffeeify, envify, browserify, uglify ]
+    .build "./app/initializers/client"
 ```
 
 #### Client initializer
@@ -63,6 +64,7 @@ routes    = require "./routes"
 
 module.exports = ->
   new Paradiso { component, render, routes }
+    .client()
 ```
 
 #### Route initializer
@@ -85,12 +87,13 @@ server   = require "paradiso-server-express"
 routes   = require "./routes"
 
 module.exports = ->
-  iso = new Paradiso { component, render, routes, server }
+  server = new Paradiso { component, render, routes, server }
+    .server()
 
   # Express-specific code
   #
-  app = iso.express.app
-  exp = iso.express.lib
+  app = server.app
+  exp = server.lib
 
   app.use exp.static "dist"
 
