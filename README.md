@@ -30,10 +30,10 @@ Paradiso does not prescribe a specific file or directory naming pattern. This is
 
 The `app/initializers` directory includes:
  
-* A file to configure the js asset build (`build.coffee`)
-* A file for each client js asset (`client.coffee`)
-* A file to define routes for client and server (`routes.coffee`)
-* A file that boots the web server (`server.coffee`)
+* `build.coffee` - configure the js asset build
+* `client.coffee` - configure the client js asset
+* `routes.coffee` - define routes for client and server
+* `server.coffee` - configure the web server
 
 #### Build initializer
 
@@ -63,8 +63,7 @@ render    = require "paradiso-render-mithril"
 routes    = require "./routes"
 
 module.exports = ->
-  new Paradiso { component, render, routes }
-    .client()
+  new Paradiso({ component, render, routes }).client()
 ```
 
 #### Route initializer
@@ -99,6 +98,10 @@ module.exports = ->
 
   app.listen 9000, ->
     console.log "Server started at http://127.0.0.1:9000"
+
+  # Return the server
+  #
+  server
 ```
 
 ### Adapters
