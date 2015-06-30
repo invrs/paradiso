@@ -24,13 +24,13 @@ Let's create the following directory structure:
         routes.coffee
         server.coffee
 
-(**Protip**: Feel free to name your files how you like; Paradiso is unopinionated.)
+(**Protip**: Feel free to name your files how you like; Paradiso is un-opinionated.)
 
 ### Initializers
 
 The `app/initializers` directory includes:
  
-* `build.coffee` - configure the js asset build
+* `build.coffee` - configure the client js asset build
 * `client.coffee` - configure the client js asset
 * `routes.coffee` - define routes for client and server
 * `server.coffee` - configure the web server
@@ -119,7 +119,7 @@ Here is the simplest way to define a component using the `paradiso-component` ad
 ```coffee
 module.exports = class
 
-  view: -> "hello!"
+  view: -> @HTML @BODY "hello!"
 ```
 
 ### Build assets
@@ -143,6 +143,8 @@ gulp.task "build", -> build()
 
 ### Start server
 
+Run your server initializer to start express:
+
 ```bash
 coffee -e "require('./app/initializers/server')()"
 ```
@@ -155,3 +157,70 @@ build = require "./app/initializers/server"
 
 gulp.task "server", -> server()
 ```
+
+### That's it
+
+Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
+
+Let's learn more about components so we can do some cool isomorphic stuff.
+
+## Components (continued)
+
+### Views
+
+As you saw in [step 1](https://github.com/invrs/paradiso-example/tree/step-1), you define a `view` function within a component class to describe what is rendered on the page.
+
+Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), which is essentially a component that doesn't hold state and only contains view logic. View components only exist for the lifetime of the redraw.
+
+Here is how we define a route that uses a separate view component using Paradiso:
+
+`app/components/home.route.coffee`:
+
+```coffee
+module.exports = class
+
+  @HomeView: require "./home.view"
+
+  constructor: ->
+    @body = "hello!"
+
+  view: ->
+    new @HomeView(@).view()
+```
+
+`app/components/home.view.coffee`:
+
+```coffee
+module.exports = class
+
+  constructor: ({ @body }) ->
+
+  view: ->
+    @HTML @BODY @body
+```
+
+#### Uni-directional data flow
+
+In this example you can see how we pass parameters down the chain from component to component.
+
+We've found that its easiest to pass `@` to the new component constructor and then use destructuring assignment to pick which variables we want. However, its totally up to you how you pass data to your constructors.
+
+#### View helpers
+
+Paradiso generates helper methods to create and execute new view components.
+
+`app/components/home.route.coffee`:
+
+```coffee
+module.exports = class
+
+  @HomeView: require "./home.view"
+
+  constructor: ->
+    @body = "hello!"
+
+  view: ->
+    @homeView @
+```
+
+Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView @`.
