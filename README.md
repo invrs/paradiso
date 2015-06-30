@@ -4,24 +4,11 @@ A common way to write reactive and isomorphic apps on any js framework.
 
 ## Features
 
-Provides a standard style for defining components and routes.
+Write adapters for all pieces of your isomorphic stack: components, DOM rendering, and web servers.
 
-Aims to be simple, unobtrusive, and more traditionally object-oriented.
+Provides a default component style that aims to be more traditionally object-oriented and extendable.
 
-Change rendering engines and web servers in two lines of code.
-
-Easy to write adapters for your favorite framework.
-
-## Adapters
-
-#### Rendering
-
-* mithril
-* react
-
-#### Web server
-
-* express
+Support for `express`, `mithril`, and `react` out of the box.
 
 ## Structure
 
@@ -35,7 +22,7 @@ To start, we will create the following directory structure:
         routes.coffee
         server.coffee
 
-Paradiso does not prescribe a specific file or directory naming pattern. This is just an example.
+Paradiso does not prescribe a specific file or directory naming pattern. This is just a suggestion.
 
 ### Initializers
 
