@@ -10,6 +10,10 @@ Provides a default component style that aims to be more traditionally object-ori
 
 Support for `express`, `mithril`, and `react` out of the box.
 
+## Overview
+
+![Overview](http://www.gliffy.com/go/publish/image/8456741/L.png)
+
 ## Getting started
 
 Let's create the following directory structure:
@@ -119,12 +123,18 @@ Here is the simplest way to define a component using the `paradiso-component` ad
 ```coffee
 module.exports = class
 
-  view: -> @HTML @BODY "hello!"
+  view: ->
+    if @server
+      @HTML @BODY "hello!"
+    else
+      "hello!"
 ```
+
+When rendering server side, we need the full layout, but client side we only need what goes in the body.
 
 ### Build assets
 
-Now your project should resemble [step 1 of the example project](https://github.com/invrs/paradiso-example/tree/step-1).
+Now your project should resemble [step one of the example project](https://github.com/invrs/paradiso-example/tree/step-1).
 
 Run your build initializer to build the client js asset:
 
@@ -168,7 +178,7 @@ Let's learn more about components so we can do some cool isomorphic stuff.
 
 ### Views
 
-As you saw in [step 1](https://github.com/invrs/paradiso-example/tree/step-1), you define a `view` function within a component class to describe what is rendered on the page.
+As you saw in [step one](https://github.com/invrs/paradiso-example/tree/step-1), we defined a `view` function to describe what is rendered on the page.
 
 Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), which is essentially a component that doesn't hold state and only contains view logic. View components only exist for the lifetime of the redraw.
 
@@ -196,14 +206,17 @@ module.exports = class
   constructor: ({ @body }) ->
 
   view: ->
-    @HTML @BODY @body
+    if @server
+      @HTML @BODY @body
+    else
+      @body
 ```
 
 #### Uni-directional data flow
 
 In this example you can see how we pass parameters down the chain from component to component.
 
-We've found that its easiest to pass `@` to the new component constructor and then use destructuring assignment to pick which variables we want. However, its totally up to you how you pass data to your constructors.
+We've found that its easiest to pass `@` to the component constructor and then use destructuring assignment to pick which variables we want. However, its totally up to you how you pass data to your constructors.
 
 #### View helpers
 
