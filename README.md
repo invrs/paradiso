@@ -85,10 +85,11 @@ module.exports = ->
 `app/initializers/server.coffee`: 
 
 ```coffee
-Paradiso = require "paradiso"
-render   = require "paradiso-render-mithril"
-server   = require "paradiso-server-express"
-routes   = require "./routes"
+Paradiso  = require "paradiso"
+component = require "paradiso-component"
+render    = require "paradiso-render-mithril"
+server    = require "paradiso-server-express"
+routes    = require "./routes"
 
 module.exports = ->
   server = new Paradiso({ component, render, routes, server }).server()
@@ -183,7 +184,10 @@ module.exports = class
     @body = "hello!"
 
   view: ->
-    new @HomeView(@).view()
+    # Creates a new instance of `HomeView` and calls `view({ body })`
+    # on it.
+    #
+    @homeView { @body }
 ```
 
 `app/components/home.view.coffee`:
@@ -200,30 +204,35 @@ module.exports = class
       @body
 ```
 
-(**Protip**: It is important to pass `@` to component constructors so that Paradiso can pick up global variables such as `@server` under the hood.)
-
-### View component helper
-
-Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView { @body }`.
-
-`app/components/home.route.coffee`:
-
-```coffee
-module.exports = class
-
-  @HomeView: require "./home.view"
-
-  constructor: ->
-    @body = "hello!"
-
-  view: ->
-    @homeView { @body }
-```
-
 ### Example
 
 This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the `paradiso-example` project.
 
-## Stateful components
+## Extending components
+
+Let's add the `@a` ([mithril-ajax](https://github.com/invrs/mithril-ajax)) and `@r` ([mithril-redraw](https://github.com/invrs/mithril-redraw)) extensions to our component structure.
+
+`app/initializers/client.coffee`:
+
+```coffee
+Paradiso = require "paradiso"
+render   = require "paradiso-render-mithril"
+routes   = require "./routes"
+
+component = [
+  require "paradiso-component"
+  require "paradiso-component-mithril-ajax"
+  require "paradiso-component-mithril-redraw"
+]
+
+module.exports = ->
+  new Paradiso({ component, render, routes }).client()
+```
+
+Don't forget to extend your component structure in `app/initializers/server.coffee` as well.
+
+## Component diagram
+
+If you're still scratching your head about helpers, state, and where component extensions come in:
 
 [![Component diagram](https://www.gliffy.com/go/publish/image/8457893/L.png)](https://www.gliffy.com/go/publish/image/8457893/L.png)
