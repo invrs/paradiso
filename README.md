@@ -197,7 +197,7 @@ Why the different behaviour for `View` components?
 
 Mithril introduced the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that keeps view logic separate from stateful operations.
 
-Here is how we define a route that uses a separate view component (view-model) using Paradiso:
+Here is how we define a route with a view component (view-model):
 
 `app/components/home.route.coffee`:
 
@@ -256,6 +256,6 @@ Don't forget to extend your component structure in `app/initializers/server.coff
 
 ## Component diagram
 
-If you're still scratching your head about helpers, state, and where component extensions come in, maybe this will help:
+If you're still scratching your head about routes, helpers, state, and where component extensions come in, maybe this will help:
 
 [![Component diagram](https://www.gliffy.com/go/publish/image/8457893/L.png)](https://www.gliffy.com/go/publish/image/8457893/L.png)
