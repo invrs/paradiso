@@ -104,6 +104,8 @@ module.exports = ->
 
 ### Home route component
 
+Components defined in your routes file must have a `view` function.
+
 `components/home/route.coffee`:
 
 ```coffee
@@ -179,7 +181,7 @@ module.exports = class
     @body = "hello!"
 
   view: ->
-    new @HomeView({ @body }).view()
+    new @HomeView(@).view()
 ```
 
 `app/components/home.view.coffee`:
@@ -196,9 +198,11 @@ module.exports = class
       @body
 ```
 
+(**Protip**: It is important to pass `@` to component constructors so that Paradiso can pick up global variables such as `@server` under the hood.)
+
 #### View helpers
 
-Paradiso automatically generates a helper method that creates a view component and calls `view()` on it.
+Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView { @body }` (thanks, Paradiso!).
 
 `app/components/home.route.coffee`:
 
@@ -213,5 +217,3 @@ module.exports = class
   view: ->
     @homeView { @body }
 ```
-
-Instead of writing `new @HomeView({ @body }).view()`, we can simplify it to `@homeView { @body }`.
