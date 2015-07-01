@@ -158,13 +158,11 @@ gulp.task "server", -> server()
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
 
-This example is available in the [step one branch](https://github.com/invrs/paradiso-example/tree/step-1) of the paradiso-example project.
+This example is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the paradiso-example project.
 
 Let's learn more about components so we can do some cool isomorphic stuff.
 
-## Components (continued)
-
-### Views
+## View components
 
 Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that doesn't hold state and only contains view logic.
 
@@ -200,9 +198,9 @@ module.exports = class
 
 (**Protip**: It is important to pass `@` to component constructors so that Paradiso can pick up global variables such as `@server` under the hood.)
 
-#### View helpers
+#### View component helper
 
-Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView { @body }` (thanks, Paradiso!).
+Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView { @body }`.
 
 `app/components/home.route.coffee`:
 
@@ -217,3 +215,7 @@ module.exports = class
   view: ->
     @homeView { @body }
 ```
+
+#### Example
+
+This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the paradiso-example project.
