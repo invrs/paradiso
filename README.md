@@ -1,12 +1,14 @@
 # Paradiso
 
-An adapter-based way to write isomorphic applications. Change frameworks like what.
+Adapter-based isomorphic applications. Change frameworks like what.
 
 ## Features
 
-Adapters for all pieces of your isomorphic stack (components, DOM rendering, and web servers).
+Adapters for all parts of your isomorphic stack (components, builds, rendering, web servers).
 
 Provides a default component style that aims to be more traditionally object-oriented and extendable.
+
+Build your own component and framework adapters that operate transparently.
 
 Support for `express`, `mithril`, and `react` out of the box.
 
@@ -24,7 +26,7 @@ Let's create the following directory structure:
         routes.coffee
         server.coffee
 
-(**Protip**: Feel free to name your files how you like; Paradiso is un-opinionated.)
+(**Protip**: Feel free to name your files how you like. Paradiso is un-opinionated.)
 
 ### Initializers
 
@@ -45,7 +47,6 @@ browserify = require "paradiso-build-browserify"
 coffeeify  = require "paradiso-build-coffeeify"
 envify     = require "paradiso-build-envify"
 uglify     = require "paradiso-build-uglify"
-routes     = require "./routes"
 
 module.exports = ->
   build = [ coffeeify, envify, browserify, uglify ]
@@ -94,6 +95,9 @@ module.exports = ->
 
   # Express-specific code
   #
+  # @param app the express instance
+  # @param lib the express library
+  #
   server.then ({ app, lib }) ->
 
     app.use lib.static "public"
@@ -122,7 +126,7 @@ module.exports = class
 
 ### Build assets
 
-Run your build initializer to build the client js asset:
+Run your build initializer to build the client js assets:
 
 ```bash
 coffee -e "require('./app/initializers/build')()"
@@ -148,8 +152,8 @@ coffee -e "require('./app/initializers/server')()"
 Or use gulp:
 
 ```coffee
-gulp  = require "gulp"
-build = require "./app/initializers/server"
+gulp   = require "gulp"
+server = require "./app/initializers/server"
 
 gulp.task "server", -> server()
 ```
@@ -158,13 +162,13 @@ gulp.task "server", -> server()
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
 
-This example is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the paradiso-example project.
+This example is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the `paradiso-example` project.
 
 Let's learn more about components so we can do some cool isomorphic stuff.
 
 ## View components
 
-Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that doesn't hold state and only contains view logic.
+Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that keeps view logic separate from stateful operations.
 
 Here is how we define a route that uses a separate view component (view-model) using Paradiso:
 
@@ -198,7 +202,7 @@ module.exports = class
 
 (**Protip**: It is important to pass `@` to component constructors so that Paradiso can pick up global variables such as `@server` under the hood.)
 
-#### View component helper
+### View component helper
 
 Instead of writing `new @HomeView(@).view()`, we can simplify it to `@homeView { @body }`.
 
@@ -216,6 +220,10 @@ module.exports = class
     @homeView { @body }
 ```
 
-#### Example
+### Example
 
-This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the paradiso-example project.
+This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the `paradiso-example` project.
+
+## Stateful components
+
+[![Component diagram](https://www.gliffy.com/go/publish/image/8457893/L.png)](https://www.gliffy.com/go/publish/image/8457893/L.png)
