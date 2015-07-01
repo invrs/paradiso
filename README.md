@@ -10,10 +10,6 @@ Provides a default component style that aims to be more traditionally object-ori
 
 Support for `express`, `mithril`, and `react` out of the box.
 
-## Overview
-
-![Overview](http://www.gliffy.com/go/publish/image/8456741/L.png)
-
 ## Getting started
 
 Let's create the following directory structure:
@@ -106,17 +102,7 @@ module.exports = ->
       console.log "Server started at http://127.0.0.1:9000"
 ```
 
-### Adapters
-
-You may be wondering, "What are these `paradiso-` libraries? Why are they separate?"
-
-Paradiso composes your stack using adapters, meaning you can easily change your build, rendering engine, server, or component style at any time.
-
-Later we will discuss writing and modifying adapters, but for now let's stick to building the app.
-
-### Components
-
-Here is the simplest way to define a component using the `paradiso-component` adapter style:
+### Home route component
 
 `components/home/route.coffee`:
 
@@ -130,7 +116,7 @@ module.exports = class
       "hello!"
 ```
 
-When rendering server side, we need the full layout, but client side we only need what goes in the body.
+(**Protip**: Use the `@server` variable to know if you are rendering server or client side.)
 
 ### Build assets
 
