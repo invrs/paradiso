@@ -169,10 +169,11 @@ Let's learn more about components so we can do some cool isomorphic stuff.
 
 ## Component creation helpers
 
-Paradiso provides helpers for succinct creation of components:
+Paradiso provides helpers for succinct creation and updating of components:
 
 ```coffee
 module.exports = class
+
   BodyView: require "./body.view"
   Content:  require "./content"
 
@@ -226,8 +227,6 @@ module.exports = class
     else
       @body
 ```
-
-### Example
 
 This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the `paradiso-example` project.
 
