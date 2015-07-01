@@ -167,9 +167,35 @@ This example is available in the [getting-started branch](https://github.com/inv
 
 Let's learn more about components so we can do some cool isomorphic stuff.
 
+## Component creation helpers
+
+Paradiso provides helpers for succinct creation of components:
+
+```coffee
+module.exports = class
+  BodyView: require "./body.view"
+  Content:  require "./content"
+
+  constructor: ->
+    @bodyView()  # new BodyView().view()
+    @content()   # content = new Content()
+
+    @bodyView()  # new BodyView().view()
+    @content()   # content
+
+    @content(x: true)  # content.x = true
+                       # content
+```
+
+If the component name ends in `View`, the helper function creates a new instance of the component every time and automatically calls `view()`.
+
+If the class does not end in `View`, the helper function creates the component and saves it. Subsequent calls to the helper function return the saved component instance.
+
 ## View components
 
-Mithril introduces the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that keeps view logic separate from stateful operations.
+Why the different behaviour for `View` components?
+
+Mithril introduced the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that keeps view logic separate from stateful operations.
 
 Here is how we define a route that uses a separate view component (view-model) using Paradiso:
 
@@ -178,15 +204,12 @@ Here is how we define a route that uses a separate view component (view-model) u
 ```coffee
 module.exports = class
 
-  @HomeView: require "./home.view"
+  HomeView: require "./home.view"
 
   constructor: ->
     @body = "hello!"
 
   view: ->
-    # Creates a new instance of `HomeView` and calls `view({ body })`
-    # on it.
-    #
     @homeView { @body }
 ```
 
@@ -233,6 +256,6 @@ Don't forget to extend your component structure in `app/initializers/server.coff
 
 ## Component diagram
 
-If you're still scratching your head about helpers, state, and where component extensions come in:
+If you're still scratching your head about helpers, state, and where component extensions come in, maybe this will help:
 
 [![Component diagram](https://www.gliffy.com/go/publish/image/8457893/L.png)](https://www.gliffy.com/go/publish/image/8457893/L.png)
