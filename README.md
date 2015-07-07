@@ -8,7 +8,7 @@ Switch out underlying libraries without changing application code.
 
 Build resuable component, framework, and server adapters that operate transparently.
 
-Plugins for Express, Mithril, Browserify, Coffeeify, Envify, Uglify, and more.
+Plugins for `Express`, `Mithril`, `Browserify`, `Coffeeify`, `Envify`, `Uglify`, and more.
 
 ## Install
 
@@ -76,7 +76,8 @@ module.exports = client routes
 routes = require "paradiso-routes"
 
 module.exports = routes
-  "/": require "../components/home/route.coffee"
+  map:
+    "/": require "../components/home/route.coffee"
 ```
 
 #### Server initializer
@@ -88,38 +89,18 @@ server  = require "paradiso-server"
 express = require "paradiso-server-express"
 routes  = require "./routes"
 
-server express, routes
-server
-  use: 
-
-# Configure express.
-#
-server ->
-  @app.use @lib.static "public"
-
-  @app.listen 9000, ->
-    console.log "Server started at http://127.0.0.1:9000"
-
-module.exports = server  
+module.exports = server express, routes,
+  port:   9000
+  static: "public"
 ```
 
-### Home route component
-
-Components defined in your routes file must have a `view` function.
+### Component
 
 `components/home/route.coffee`:
 
 ```coffee
-module.exports = class
-
-  view: ->
-    if @server
-      @HTML @BODY "hello!"
-    else
-      "hello!"
+module.exports = -> "hello!"
 ```
-
-(**Protip**: Use the `@server` variable to know if you are rendering server or client side.)
 
 ### Build assets
 
@@ -129,110 +110,65 @@ Build your client js assets:
 paradiso app/initializers/build
 ```
 
+or with `gulp`:
+
+```coffee
+gulp     = require "gulp"
+paradiso = require "paradiso"
+
+gulp.task "build", -> paradiso "app/initializers/build"
+```
+
 ### Start server
 
-Start express:
+Start the web server:
 
 ```bash
 paradiso app/initializers/server
 ```
 
-### That's it
+or with `gulp`:
+
+```coffee
+gulp     = require "gulp"
+paradiso = require "paradiso"
+
+gulp.task "server", -> paradiso "app/initializers/server"
+```
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
 
-This example is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the `paradiso-example` project.
+This project is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the [paradiso-example](https://github.com/invrs/paradiso-example) repo.
 
-Let's learn more about components so we can do some cool isomorphic stuff.
+### Components
 
-## Component creation helpers
+Paradiso ships with [paradiso-component](https://github.com/invrs/paradiso-component), an object oriented approach to writing components.
 
-Paradiso provides helpers for succinct creation and updating of components:
+#### Initializers
 
-```coffee
-module.exports = class
-
-  BodyView: require "./body.view"
-  Content:  require "./content"
-
-  constructor: ->
-    @bodyView()  # new BodyView().view()
-    @content()   # content = new Content()
-
-    @bodyView()  # new BodyView().view()
-    @content()   # content
-
-    @content(x: true)  # content.x = true
-                       # content
-```
-
-If the component name ends in `View`, the helper function creates a new instance of the component every time and automatically calls `view()`.
-
-If the class does not end in `View`, the helper function creates the component and saves it. Subsequent calls to the helper function return the saved component instance.
-
-## View components
-
-Why the different behaviour for `View` components?
-
-Mithril introduced the concept of a [view-model](http://lhorie.github.io/mithril-blog/what-is-a-view-model.html), a component that keeps view logic separate from stateful operations.
-
-Here is how we define a route with a view component (view-model):
-
-`app/components/home.route.coffee`:
-
-```coffee
-module.exports = class
-
-  HomeView: require "./home.view"
-
-  constructor: ->
-    @body = "hello!"
-
-  view: ->
-    @homeView { @body }
-```
-
-`app/components/home.view.coffee`:
-
-```coffee
-module.exports = class
-
-  constructor: ({ @body }) ->
-
-  view: ->
-    if @server
-      @HTML @BODY @body
-    else
-      @body
-```
-
-This example is available in the [view-component branch](https://github.com/invrs/paradiso-example/tree/view-component) of the `paradiso-example` project.
-
-## Extending components
-
-Let's add the `@a` ([mithril-ajax](https://github.com/invrs/mithril-ajax)) and `@r` ([mithril-redraw](https://github.com/invrs/mithril-redraw)) extensions to our component structure.
+Add functionality to the initializers.
 
 `app/initializers/client.coffee`:
 
 ```coffee
-Paradiso = require "paradiso"
-render   = require "paradiso-render-mithril"
-routes   = require "./routes"
+client    = require "paradiso-client"
+component = require "paradiso-component"
+routes    = require "./routes"
 
-component = [
-  require "paradiso-component"
-  require "paradiso-component-mithril-ajax"
-  require "paradiso-component-mithril-redraw"
-]
-
-module.exports = ->
-  new Paradiso({ component, render, routes }).client()
+module.exports = client component, mithril, routes
 ```
 
-Don't forget to extend your component structure in `app/initializers/server.coffee` as well.
+`app/initializers/server.coffee`:
 
-## Component diagram
+```coffee
+server    = require "paradiso-server"
+express   = require "paradiso-server-express"
+mithril   = require "paradiso-component"
+routes    = require "./routes"
 
-If you're still scratching your head about routes, helpers, state, and where component extensions come in, maybe this will help:
+module.exports = server component, express, mithril, routes,
+  port:   9000
+  static: "public"
+```
 
-[![Component diagram](https://www.gliffy.com/go/publish/image/8457893/L.png)](https://www.gliffy.com/go/publish/image/8457893/L.png)
+#
