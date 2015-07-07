@@ -1,16 +1,14 @@
 # Paradiso
 
-Adapter-based isomorphic applications. Change frameworks like what.
+An adapter-based framework for building isomorphic applications.
 
 ## Features
 
-Adapters for all parts of your isomorphic stack (components, builds, rendering, web servers).
+Switch out underlying libraries without changing application code.
 
-Provides a default component style that aims to be more traditionally object-oriented and extendable.
+Build resuable component, framework, and server adapters that operate transparently.
 
-Build your own component and framework adapters that operate transparently.
-
-Support for `express`, `mithril`, and `react` out of the box.
+Plugins for Express, Mithril, Browserify, Coffeeify, Envify, Uglify, and more.
 
 ## Install
 
@@ -20,7 +18,7 @@ npm install -g paradiso
 
 ## Getting started
 
-Let's create the following directory structure:
+First, let's create a very simple project with the following structure:
 
     app/
       components/
@@ -32,16 +30,16 @@ Let's create the following directory structure:
         routes.coffee
         server.coffee
 
-(**Protip**: Feel free to name your files how you like. Paradiso is unopinionated.)
+(**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
 ### Initializers
 
 The `app/initializers` directory includes:
  
-* `build.coffee` - configure the client js asset build
-* `client.coffee` - configure the client js asset
-* `routes.coffee` - define routes for client and server
-* `server.coffee` - configure the web server
+* `build.coffee` - build client asset
+* `client.coffee` - define client asset
+* `routes.coffee` - routes for client and server
+* `server.coffee` - web server
 
 #### Build initializer
 
@@ -51,29 +49,23 @@ The `app/initializers` directory includes:
 build      = require "paradiso-build"
 browserify = require "paradiso-build-browserify"
 coffeeify  = require "paradiso-build-coffeeify"
-envify     = require "paradiso-build-envify"
-uglify     = require "paradiso-build-uglify"
 
 browserify
-  root:  "#{__dirname}/../.."
-  paths: "public/client": "app/initializers/client"
+  paths:
+    "public/client": "app/initializers/client"
 
-module.exports = build browserify, coffeeify, envify, uglify
+module.exports = build browserify, coffeeify
 ```
-
-(**Protip**: You can have multiple client assets, just use an array of filenames.)
 
 #### Client initializer
 
 `app/initializers/client.coffee`:
 
 ```coffee
-client    = require "paradiso-client"
-component = require "paradiso-client-component"
-mithril   = require "paradiso-client-mithril"
-routes    = require "./routes"
+client = require "paradiso-client"
+routes = require "./routes"
 
-module.exports = client component, mithril, routes
+module.exports = client routes
 ```
 
 #### Route initializer
@@ -92,14 +84,16 @@ module.exports = routes
 `app/initializers/server.coffee`: 
 
 ```coffee
-server    = require "paradiso-server"
-component = require "paradiso-server-component"
-express   = require "paradiso-server-express"
-mithril   = require "paradiso-server-mithril"
-routes    = require "./routes"
+server  = require "paradiso-server"
+express = require "paradiso-server-express"
+routes  = require "./routes"
 
-server component, express, mithril, routes
+server express, routes
+server
+  use: 
 
+# Configure express.
+#
 server ->
   @app.use @lib.static "public"
 
