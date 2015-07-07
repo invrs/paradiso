@@ -12,6 +12,12 @@ Build your own component and framework adapters that operate transparently.
 
 Support for `express`, `mithril`, and `react` out of the box.
 
+## Install
+
+```bash
+npm install -g paradiso
+```
+
 ## Getting started
 
 Let's create the following directory structure:
@@ -26,7 +32,7 @@ Let's create the following directory structure:
         routes.coffee
         server.coffee
 
-(**Protip**: Feel free to name your files how you like. Paradiso is un-opinionated.)
+(**Protip**: Feel free to name your files how you like. Paradiso is unopinionated.)
 
 ### Initializers
 
@@ -42,17 +48,17 @@ The `app/initializers` directory includes:
 `app/initializers/build.coffee`:
 
 ```coffee
-Paradiso   = require "paradiso"
+build      = require "paradiso-build"
 browserify = require "paradiso-build-browserify"
 coffeeify  = require "paradiso-build-coffeeify"
 envify     = require "paradiso-build-envify"
 uglify     = require "paradiso-build-uglify"
 
-module.exports = ->
-  build = [ coffeeify, envify, browserify, uglify ]
+browserify
+  root:  "#{__dirname}/../.."
+  paths: "public/client": "app/initializers/client"
 
-  new Paradiso({ build }).build
-    "./public": "./app/initializers/client"
+module.exports = build browserify, coffeeify, envify, uglify
 ```
 
 (**Protip**: You can have multiple client assets, just use an array of filenames.)
@@ -62,13 +68,12 @@ module.exports = ->
 `app/initializers/client.coffee`:
 
 ```coffee
-Paradiso  = require "paradiso"
-component = require "paradiso-component"
-render    = require "paradiso-render-mithril"
+client    = require "paradiso-client"
+component = require "paradiso-client-component"
+mithril   = require "paradiso-client-mithril"
 routes    = require "./routes"
 
-module.exports = ->
-  new Paradiso({ component, render, routes }).client()
+module.exports = client component, mithril, routes
 ```
 
 #### Route initializer
@@ -76,7 +81,9 @@ module.exports = ->
 `app/initializers/routes.coffee`:
 
 ```coffee
-module.exports = ->
+routes = require "paradiso-routes"
+
+module.exports = routes
   "/": require "../components/home/route.coffee"
 ```
 
@@ -85,26 +92,21 @@ module.exports = ->
 `app/initializers/server.coffee`: 
 
 ```coffee
-Paradiso  = require "paradiso"
-component = require "paradiso-component"
-render    = require "paradiso-render-mithril"
-server    = require "paradiso-server-express"
+server    = require "paradiso-server"
+component = require "paradiso-server-component"
+express   = require "paradiso-server-express"
+mithril   = require "paradiso-server-mithril"
 routes    = require "./routes"
 
-module.exports = ->
-  server = new Paradiso({ component, render, routes, server }).server()
+server component, express, mithril, routes
 
-  # Express-specific code
-  #
-  # @param app the express instance
-  # @param lib the express library
-  #
-  server.then ({ app, lib }) ->
+server ->
+  @app.use @lib.static "public"
 
-    app.use lib.static "public"
+  @app.listen 9000, ->
+    console.log "Server started at http://127.0.0.1:9000"
 
-    app.listen 9000, ->
-      console.log "Server started at http://127.0.0.1:9000"
+module.exports = server  
 ```
 
 ### Home route component
@@ -127,36 +129,18 @@ module.exports = class
 
 ### Build assets
 
-Run your build initializer to build the client js assets:
+Build your client js assets:
 
 ```bash
-coffee -e "require('./app/initializers/build')()"
-```
-
-Or use gulp:
-
-```coffee
-gulp  = require "gulp"
-build = require "./app/initializers/build"
-
-gulp.task "build", -> build()
+paradiso app/initializers/build
 ```
 
 ### Start server
 
-Run your server initializer to start express:
+Start express:
 
 ```bash
-coffee -e "require('./app/initializers/server')()"
-```
-
-Or use gulp:
-
-```coffee
-gulp   = require "gulp"
-server = require "./app/initializers/server"
-
-gulp.task "server", -> server()
+paradiso app/initializers/server
 ```
 
 ### That's it
