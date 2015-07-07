@@ -25,4 +25,4 @@ module.exports = class Paradiso
         routes[path] = @route { Component, path }
 
     @render.routes routes
-    @
+    routes
