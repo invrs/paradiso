@@ -46,7 +46,7 @@ module.exports = (compose_options) ->
           for k, v of args[0]
             @_components[id][k] = v
         else
-          @_components[id] = component(args...)
+          @_components[id] ||= component(args...)
 
         @_components[id]
 
