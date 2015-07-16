@@ -16,15 +16,16 @@ module.exports = (compose_options) ->
             @[name] = (args...) ->
               composer.component(args...)
 
-            @[fn_name] = buildHelper {
+            @[fn_name] = buildHelper({
               composer, fn_name, var_name
-            }
+            }).bind @
 
       super
 
     buildHelper = ({ composer, fn_name, var_name }) ->
       (args...) ->
-        key = if typeof args[0] == "string"
+        key_types = [ "number", "string" ]
+        key = if key_types.indexOf(typeof args[0]) > -1
           args.shift()
 
         args[0]        ||= {}
