@@ -38,12 +38,13 @@ module.exports = class Express
         server.status 500
         @rejected { component } if @rejected
 
-    setTimeout(
-      =>
-        return if ended
-        ended = true
+    unless component.constructor.disable_timeout
+      setTimeout(
+        =>
+          return if ended
+          ended = true
 
-        server.status 500
-        @timeout { component } if @timeout
-      5000
-    )
+          server.status 500
+          @timeout { component } if @timeout
+        5000
+      )
