@@ -22,12 +22,12 @@ First, let's create a very simple project with the following structure:
 
     app/
       components/
-        home.coffee
+        - home.coffee
       initializers/
-        build.coffee
-        client.coffee
-        routes.coffee
-        server.coffee
+        - build.coffee
+        - client.coffee
+        - routes.coffee
+        - server.coffee
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
@@ -83,11 +83,12 @@ routes map:
 `app/initializers/server.coffee`: 
 
 ```coffee
+require "./routes"
+
 server  = require "paradiso-server"
 express = require "paradiso-server-express"
-routes  = require "./routes"
 
-server express, routes,
+server express,
   port:   9000
   static: "public"
 ```
