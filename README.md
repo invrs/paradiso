@@ -22,13 +22,12 @@ First, let's create a very simple project with the following structure:
 
     app/
       components/
-        home/
-          route.coffee
+        - home.coffee
       initializers/
-        build.coffee
-        client.coffee
-        routes.coffee
-        server.coffee
+        - build.coffee
+        - client.coffee
+        - routes.coffee
+        - server.coffee
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
@@ -36,10 +35,10 @@ First, let's create a very simple project with the following structure:
 
 The `app/initializers` directory includes:
  
-* `build.coffee` - build client asset
-* `client.coffee` - define client asset
-* `routes.coffee` - routes for client and server
-* `server.coffee` - web server
+* `build.coffee` - builds the client asset
+* `client.coffee` - defines the client asset
+* `routes.coffee` - contains routes for client and server
+* `server.coffee` - starts the web server
 
 #### Build initializer
 
@@ -54,7 +53,7 @@ browserify
   paths:
     "public/client": "app/initializers/client"
 
-module.exports = build browserify, coffeeify
+build browserify, coffeeify
 ```
 
 #### Client initializer
@@ -62,10 +61,10 @@ module.exports = build browserify, coffeeify
 `app/initializers/client.coffee`:
 
 ```coffee
-client = require "paradiso-client"
-routes = require "./routes"
+require "./routes"
 
-module.exports = client routes
+client = require "paradiso-client"
+client()
 ```
 
 #### Route initializer
@@ -75,9 +74,8 @@ module.exports = client routes
 ```coffee
 routes = require "paradiso-routes"
 
-module.exports = routes
-  map:
-    "/": require "../components/home/route.coffee"
+routes map:
+  "/": require "../components/home.coffee"
 ```
 
 #### Server initializer
@@ -85,18 +83,19 @@ module.exports = routes
 `app/initializers/server.coffee`: 
 
 ```coffee
+require "./routes"
+
 server  = require "paradiso-server"
 express = require "paradiso-server-express"
-routes  = require "./routes"
 
-module.exports = server express, routes,
+server express,
   port:   9000
   static: "public"
 ```
 
 ### Component
 
-`components/home/route.coffee`:
+`components/home.coffee`:
 
 ```coffee
 module.exports = -> "hello!"
@@ -107,7 +106,7 @@ module.exports = -> "hello!"
 Build your client js assets:
 
 ```bash
-paradiso app/initializers/build
+coffee app/initializers/build.coffee
 ```
 
 or with `gulp`:
@@ -116,7 +115,7 @@ or with `gulp`:
 gulp     = require "gulp"
 paradiso = require "paradiso"
 
-gulp.task "build", -> paradiso "app/initializers/build"
+gulp.task "build", -> require "app/initializers/build"
 ```
 
 ### Start server
@@ -124,7 +123,7 @@ gulp.task "build", -> paradiso "app/initializers/build"
 Start the web server:
 
 ```bash
-paradiso app/initializers/server
+coffee app/initializers/server.coffee
 ```
 
 or with `gulp`:
@@ -133,12 +132,12 @@ or with `gulp`:
 gulp     = require "gulp"
 paradiso = require "paradiso"
 
-gulp.task "server", -> paradiso "app/initializers/server"
+gulp.task "server", -> require "app/initializers/server"
 ```
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
 
-This project is available in the [getting-started branch](https://github.com/invrs/paradiso-example/tree/getting-started) of the [paradiso-example](https://github.com/invrs/paradiso-example) repo.
+This project is available in the [getting-started](https://github.com/invrs/paradiso-example/tree/getting-started) branch of the example repo.
 
 ### Components
 
@@ -146,29 +145,63 @@ Paradiso ships with [paradiso-component](https://github.com/invrs/paradiso-compo
 
 #### Initializers
 
-Add functionality to the initializers.
+Add component functionality through the initializers:
 
 `app/initializers/client.coffee`:
 
 ```coffee
+require "./routes"
+
 client    = require "paradiso-client"
 component = require "paradiso-component"
-routes    = require "./routes"
+mithril   = require "paradiso-component-mithril"
 
-module.exports = client component, mithril, routes
+client component, mithril
 ```
 
 `app/initializers/server.coffee`:
 
 ```coffee
+require "./routes"
+
 server    = require "paradiso-server"
 express   = require "paradiso-server-express"
-mithril   = require "paradiso-component"
-routes    = require "./routes"
+component = require "paradiso-component"
+mithril   = require "paradiso-component-mithril"
 
-module.exports = server component, express, mithril, routes,
+server component, express, mithril,
   port:   9000
   static: "public"
 ```
 
-#
+#### Component
+
+Let's build a valid HTML page with content:
+
+`components/home.coffee`:
+
+```coffee
+module.exports = class
+
+  constructor: ->
+    @title   = "Home"
+    @content = [
+      @H1 @title
+      @P  if @server "server" else "client"
+    ]
+
+  view: ->
+    if @server
+      @layoutView @
+    else
+      @content
+  
+  LayoutView: class
+    constructor: ({ @content, @title }) ->
+
+    view: ->
+      @HTML [
+        @HEAD @title
+        @BODY @content
+      ]
+```
