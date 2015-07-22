@@ -62,6 +62,7 @@ build browserify, coffeeify
 
 ```coffee
 require "./routes"
+
 client = require "paradiso-client"
 client()
 ```
@@ -73,9 +74,8 @@ client()
 ```coffee
 routes = require "paradiso-routes"
 
-routes
-  map:
-    "/": require "../components/home.coffee"
+routes map:
+  "/": require "../components/home.coffee"
 ```
 
 #### Server initializer
@@ -149,22 +149,26 @@ Add component functionality through the initializers:
 `app/initializers/client.coffee`:
 
 ```coffee
+require "./routes"
+
 client    = require "paradiso-client"
 component = require "paradiso-component"
-routes    = require "./routes"
+mithril   = require "paradiso-component-mithril"
 
-module.exports = client component, mithril, routes
+client component, mithril
 ```
 
 `app/initializers/server.coffee`:
 
 ```coffee
+require "./routes"
+
 server    = require "paradiso-server"
 express   = require "paradiso-server-express"
 component = require "paradiso-component"
-routes    = require "./routes"
+mithril   = require "paradiso-component-mithril"
 
-server component, express, mithril, routes,
+server component, express, mithril,
   port:   9000
   static: "public"
 ```
@@ -200,4 +204,3 @@ module.exports = class
         @BODY @content
       ]
 ```
-
