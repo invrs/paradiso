@@ -32,7 +32,7 @@ module.exports = class Express
       return if ended
       ended = true
 
-      if promises || component.force_render
+      if promises || component.server?.force_render
         server.end render.view component
       else
         server.status 500
