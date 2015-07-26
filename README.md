@@ -55,7 +55,7 @@ browserify paths:
 build browserify, coffeeify
 ```
 
-#### Route initializer
+#### Routes initializer
 
 `app/initializers/routes.coffee`:
 
