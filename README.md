@@ -55,17 +55,6 @@ browserify paths:
 build browserify, coffeeify
 ```
 
-#### Client initializer
-
-`app/initializers/client.coffee`:
-
-```coffee
-require "./routes"
-
-client = require "paradiso-client"
-client()
-```
-
 #### Route initializer
 
 `app/initializers/routes.coffee`:
@@ -73,8 +62,19 @@ client()
 ```coffee
 routes = require "paradiso-routes"
 
-routes map:
+module.exports = routes map:
   "/": require "../components/home.coffee"
+```
+
+#### Client initializer
+
+`app/initializers/client.coffee`:
+
+```coffee
+routes = require "./routes"
+client = require "paradiso-client"
+
+client routes
 ```
 
 #### Server initializer
@@ -82,12 +82,11 @@ routes map:
 `app/initializers/server.coffee`: 
 
 ```coffee
-require "./routes"
-
+routes  = require "./routes"
 server  = require "paradiso-server"
 express = require "paradiso-server-express"
 
-server express,
+server routes, express,
   port:   9000
   static: "public"
 ```
@@ -149,26 +148,24 @@ Add component functionality through the initializers:
 `app/initializers/client.coffee`:
 
 ```coffee
-require "./routes"
-
+routes    = "./routes"
 client    = require "paradiso-client"
 component = require "paradiso-component"
 mithril   = require "paradiso-component-mithril"
 
-client component, mithril
+client routes, component, mithril
 ```
 
 `app/initializers/server.coffee`:
 
 ```coffee
-require "./routes"
-
+routes    = require "./routes"
 server    = require "paradiso-server"
 express   = require "paradiso-server-express"
 component = require "paradiso-component"
 mithril   = require "paradiso-component-mithril"
 
-server component, express, mithril,
+server routes, component, express, mithril,
   port:   9000
   static: "public"
 ```
