@@ -1,6 +1,6 @@
 # Paradiso
 
-An adapter-based framework for building isomorphic applications.
+An adapter-based, library-agnostic framework for building web applications.
 
 ## Features
 
@@ -8,7 +8,7 @@ Switch out underlying libraries without changing application code.
 
 Build resuable component, framework, and server adapters that operate transparently.
 
-Plugins for `Express`, `Mithril`, `Browserify`, `Coffeeify`, `Envify`, `Uglify`, and more.
+Adapters for `Express`, `Mithril`, `Browserify`, `Coffeeify`, `Envify`, `Uglify`, and more.
 
 ## Install
 
@@ -35,9 +35,9 @@ First, let's create a very simple project with the following structure:
 
 The `app/initializers` directory includes:
  
-* `build.coffee` - builds the client asset
-* `client.coffee` - defines the client asset
-* `routes.coffee` - contains routes for client and server
+* `build.coffee` - builds the client js asset
+* `client.coffee` - defines the client js asset
+* `routes.coffee` - routes for client and server
 * `server.coffee` - starts the web server
 
 #### Build initializer
@@ -49,9 +49,8 @@ build      = require "paradiso-build"
 browserify = require "paradiso-build-browserify"
 coffeeify  = require "paradiso-build-coffeeify"
 
-browserify
-  paths:
-    "public/client": "app/initializers/client"
+browserify paths:
+  "public/client": "app/initializers/client"
 
 build browserify, coffeeify
 ```
@@ -186,8 +185,8 @@ module.exports = class
   constructor: ->
     @title   = "Home"
     @content = [
-      @H1 @title
-      @P  if @server "server" else "client"
+      H1 @title
+      P  if @server "server" else "client"
     ]
 
   view: ->
@@ -200,8 +199,8 @@ module.exports = class
     constructor: ({ @content, @title }) ->
 
     view: ->
-      @HTML [
-        @HEAD @title
-        @BODY @content
+      HTML [
+        HEAD @title
+        BODY @content
       ]
 ```
