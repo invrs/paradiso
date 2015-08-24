@@ -7,10 +7,10 @@ module.exports = class Express
 
   get: ({ composer, path, render }) ->
     @express.get path, (req, res, next) =>
-      res.type composer.Component.response_type || "html"
-
       _globals  = @globals { req, res }
       component = composer.component { _globals }
+
+      res.type component.response_type || composer.Component.response_type || "html"
 
       @request { component, render }
 
