@@ -1,4 +1,4 @@
-Promise = require "bluebird"
+m = require "mithril"
 
 # Exposes a promise array to append to as your components
 # run. Wait for promises to resolve before rendering the
@@ -16,21 +16,28 @@ module.exports = class Waiter
   loop: (run_count=0) ->
     length = @_promises.length
     
-    Promise
-      .delay(10)
+    @delay(10)
       .then(
         =>
-          return [] if run_count > 500
-          run_count += 1
-
-          @_promises
+          if run_count > 500
+            m.sync []
+          else
+            run_count += 1
+            m.sync @_promises
       )
-      .all()
       .then(
         =>
           if length != @_promises.length
             @loop run_count
       )
+
+  delay: (timeout) ->
+    deferred = m.deferred()
+    setTimeout(
+      -> deferred.resolve()
+      timeout
+    )
+    deferred.promise
 
   @wait: (component) ->
     ring = new Waiter component

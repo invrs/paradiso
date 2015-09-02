@@ -6,7 +6,6 @@
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "",
     "mithril-node-render": "",
     "mithril.sugartags": ""
   },

@@ -1,3 +1,5 @@
+Waiter = require "../server/waiter"
+
 unless document?
   render = require "#{""}mithril-node-render"
 
@@ -8,8 +10,15 @@ module.exports = class
   component: (composer) ->
     _globals = @globals()
 
-    controller: -> composer.component { _globals }
-    view:   (c) -> c.view()
+    controller: ->
+      component = composer.component { _globals }
+      
+      if window?
+        window.paradisoReady = -> Waiter.wait(component)
+      
+      component
+
+    view: (c) -> c.view()
 
   globals: ->
     m = @mithril
