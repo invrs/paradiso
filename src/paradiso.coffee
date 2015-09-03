@@ -19,10 +19,10 @@ module.exports = class Paradiso
     else
       @render.component composer
 
-  routes: (routes={}) ->
+  routes: (routes={}, element) ->
     for path, Component of routes
       do (path, Component) =>
         routes[path] = @route { Component, path }
 
-    @render.routes routes
+    @render.routes routes, element
     routes

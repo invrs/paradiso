@@ -27,9 +27,9 @@ module.exports = class
   render: (args...) ->
     @mithril.render args...
 
-  routes: (routes) ->
+  routes: (routes, element) ->
     if document?
-      @mithril.route document.body, "/", routes
+      @mithril.route element || document.body, "/", routes
 
   view: (component) ->
     if document?
