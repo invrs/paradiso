@@ -22,81 +22,88 @@ First, let's create a very simple project with the following structure:
 
     app/
       components/
-        - home.coffee
-      initializers/
-        - build.coffee
-        - client.coffee
-        - routes.coffee
-        - server.coffee
+        - home.js
+      init/
+        - build.js
+        - client.js
+        - routes.js
+        - server.js
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
 ### Initializers
 
-The `app/initializers` directory includes:
+The `app/init` directory includes:
  
-* `build.coffee` - builds the client js asset
-* `client.coffee` - defines the client js asset
-* `routes.coffee` - routes for client and server
-* `server.coffee` - starts the web server
+* `build.js` - builds the client js asset
+* `client.js` - defines the client js asset
+* `routes.js` - routes for client and server
+* `server.js` - starts the web server
 
 #### Build initializer
 
-`app/initializers/build.coffee`:
+`app/init/build.js`:
 
-```coffee
-build      = require "paradiso-build"
-browserify = require "paradiso-build-browserify"
-coffeeify  = require "paradiso-build-coffeeify"
+```js
+import { browserify, env, sass, minify, uglify } from "paradiso"
 
-browserify paths:
-  "public/client": "app/initializers/client"
+let build = browserify(
+  "../app/init/client": "../public/client"
+).then(sass(
+  "../app/styles/main": "../public/styles"
+))
 
-build browserify, coffeeify
+if env == "production"
+  build
+    .then(uglify("../public/client"))
+    .then(minify("../public/styles"))
 ```
 
 #### Routes initializer
 
-`app/initializers/routes.coffee`:
+`app/init/routes.js`:
 
-```coffee
-routes = require "paradiso-routes"
+```js
+import { mithril } from "paradiso"
 
-module.exports = routes map:
-  "/": require "../components/home.coffee"
+mithril("/": "../components/home")
+
+module.exports = mithril
 ```
 
 #### Client initializer
 
-`app/initializers/client.coffee`:
+`app/init/client.js`:
 
-```coffee
-routes = require "./routes"
-client = require "paradiso-client"
+```js
+import { mithril } from "./routes"
 
-client routes
+mithril().client()
 ```
 
 #### Server initializer
 
-`app/initializers/server.coffee`: 
+`app/init/server.js`: 
 
-```coffee
-routes  = require "./routes"
-server  = require "paradiso-server"
-express = require "paradiso-server-express"
+```js
+import { mithril } from "./routes"
 
-server routes, express,
+mithril().server({
   port:   9000
   static: "public"
+})
 ```
 
 ### Component
 
-`components/home.coffee`:
+`components/home.js`:
 
-```coffee
-module.exports = -> "hello!"
+```js
+import def from "definite"
+
+module.exports = def(class {
+  then: => "hello!"
+})
 ```
 
 ### Build assets
@@ -104,16 +111,7 @@ module.exports = -> "hello!"
 Build your client js assets:
 
 ```bash
-coffee app/initializers/build.coffee
-```
-
-or with `gulp`:
-
-```coffee
-gulp     = require "gulp"
-paradiso = require "paradiso"
-
-gulp.task "build", -> require "app/initializers/build"
+node ./init/build
 ```
 
 ### Start server
@@ -121,16 +119,7 @@ gulp.task "build", -> require "app/initializers/build"
 Start the web server:
 
 ```bash
-coffee app/initializers/server.coffee
-```
-
-or with `gulp`:
-
-```coffee
-gulp     = require "gulp"
-paradiso = require "paradiso"
-
-gulp.task "server", -> require "app/initializers/server"
+node ./init/server
 ```
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
@@ -139,65 +128,35 @@ This project is available in the [getting-started](https://github.com/invrs/para
 
 ### Components
 
-Paradiso ships with [paradiso-component](https://github.com/invrs/paradiso-component), an object oriented approach to writing components.
-
-#### Initializers
-
-Add component functionality through the initializers:
-
-`app/initializers/client.coffee`:
-
-```coffee
-routes    = "./routes"
-client    = require "paradiso-client"
-component = require "paradiso-component"
-mithril   = require "paradiso-component-mithril"
-
-client routes, component, mithril
-```
-
-`app/initializers/server.coffee`:
-
-```coffee
-routes    = require "./routes"
-server    = require "paradiso-server"
-express   = require "paradiso-server-express"
-component = require "paradiso-component"
-mithril   = require "paradiso-component-mithril"
-
-server routes, component, express, mithril,
-  port:   9000
-  static: "public"
-```
-
-#### Component
-
 Let's build a valid HTML page with content:
 
-`components/home.coffee`:
+`components/home.js`:
 
-```coffee
-module.exports = class
+```js
+import def from "definite"
 
-  constructor: ->
-    @title   = "Home"
-    @content = [
-      H1 @title
-      P  if @server "server" else "client"
+module.exports = def(class {
+
+  then: () => {
+    let content = [
+      H1(this.title),
+      P(`hello`)
     ]
+    let title = `home`
 
-  view: ->
-    if @server
-      @layoutView @
+    if this.get(`server`)
+      return this.layoutView({ content, title })
     else
-      @content
+      return content
+  }
   
-  LayoutView: class
-    constructor: ({ @content, @title }) ->
+  LayoutView: class {
 
-    view: ->
+    then: () =>
       HTML [
         HEAD @title
         BODY @content
       ]
+  }
+})
 ```
