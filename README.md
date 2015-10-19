@@ -49,11 +49,11 @@ The `app/init` directory includes:
 ```js
 import { browserify, env, sass, minify, uglify } from "paradiso"
 
-let build = browserify(
+let build = browserify({
   "../app/init/client": "../public/client"
-).then(sass(
+}).then(sass({
   "../app/styles/main": "../public/styles"
-))
+}))
 
 if env == "production"
   build
@@ -68,7 +68,7 @@ if env == "production"
 ```js
 import { mithril } from "paradiso"
 
-mithril("/": "../components/home")
+mithril({ "/": "../components/home" })
 
 module.exports = mithril
 ```
