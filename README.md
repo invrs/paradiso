@@ -154,8 +154,8 @@ module.exports = def(class {
 
     then: () =>
       HTML [
-        HEAD @title
-        BODY @content
+        HEAD(this.get(`title`))
+        BODY(this.get(`content`))
       ]
   }
 })
