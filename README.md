@@ -28,6 +28,8 @@ First, let's create a very simple project with the following structure:
         - client.js
         - routes.js
         - server.js
+      styles/
+        - main.scss
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
