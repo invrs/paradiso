@@ -88,9 +88,11 @@ mithril().client()
 `app/init/server.js`: 
 
 ```js
+import { express } from "paradiso"
 import { mithril } from "./routes"
 
-mithril().server({
+express({
+  engine: mithril()
   port:   9000
   static: "public"
 })
