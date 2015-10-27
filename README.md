@@ -148,19 +148,19 @@ module.exports = def(class {
     ]
     let title = `home`
 
-    if this.get(`server`)
+    if this.options.server
       return this.layoutView({ content, title })
     else
       return content
   }
   
-  LayoutView: class {
+  layoutView: def(class {
 
     then: () =>
       HTML [
-        HEAD(this.get(`title`))
-        BODY(this.get(`content`))
+        HEAD(this.options.title)
+        BODY(this.options.content)
       ]
-  }
+  })
 })
 ```
