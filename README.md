@@ -48,33 +48,33 @@ First, let's create a very simple project with the following structure:
 `app/init/build.js`:
 
 ```js
-import paradiso from "paradiso"
-
 const ENV = process.env.NODE_ENV
 
-export default paradiso(class {
+class Build {
   compress() {
-    if (ENV != "production")
-      return Promise.resolve()
+    if (ENV != "production") return
 
     return super.compress({
       css: "../public/styles",
-      js: "../public/client"
+      js:  "../public/client"
     })
   }
 
   package() {
     return super.package({
-      css: "../app/styles/main",
-      js: "../app/init/client",
-      target: "../public/client"
+      css:  "../app/init/styles",
+      js:   "../app/init/client",
+      dest: "../public"
     })
   }
 
   then() {
     return this.package().then(compress())
   }
-})
+}
+
+import paradiso from "paradiso"
+export default paradiso(Build)
 ```
 
 #### App initializer
@@ -82,9 +82,7 @@ export default paradiso(class {
 `app/init/app.js`:
 
 ```js
-import paradiso from "paradiso"
-
-export default paradiso(class {
+class App {
   route() {
     return super.route({
       "/": "../components/home"
@@ -97,7 +95,10 @@ export default paradiso(class {
       static: "public"
     })
   }
-})
+}
+
+import paradiso from "paradiso"
+export default paradiso(App)
 ```
 
 #### Client initializer
@@ -125,27 +126,30 @@ export default app().server()
 `components/home.js`:
 
 ```js
-import def from "definite"
-
-module.exports = def(class {
+class Home {
   then() { return "hello!" }
-})
+}
+
+import paradiso from "paradiso"
+export default paradiso(Home)
 ```
 
 ### Build assets
 
-Use the [`def` command](https://github.com/invrs/definite#definite-executor) to run your initialization classes:
+Use the `diso` command to run your initialization classes:
 
 ```bash
-def init/client
+diso init/client
 ```
+
+(**Protip**: `diso` is just a wrapper for [the `def` command](https://github.com/invrs/definite#definite-executor))
 
 ### Start server
 
 Start the web server:
 
 ```bash
-def init/server
+diso init/server
 ```
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
