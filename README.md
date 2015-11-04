@@ -1,20 +1,30 @@
 # Paradiso
 
-An adapter-based, library-agnostic framework for building web applications.
+A library-agnostic framework for building concise, testable, and universal Node.js web apps.
 
 ## Features
 
 Switch out underlying libraries without changing application code.
 
-Build resuable component, framework, and server adapters that operate transparently.
-
-Adapters for `Express`, `Mithril`, `Browserify`, `Coffeeify`, `Envify`, `Uglify`, and more.
+Uses the [definite](https://github.com/invrs/definite) pattern to keep code clean, testable, and extensible.
 
 ## Install
 
 ```bash
 npm install -g paradiso
 ```
+
+## The basics
+
+Paradiso is just a custom [definite](https://github.com/invrs/definite) class builder. Please [read more about definite](https://github.com/invrs/definite) if you haven't.
+
+Paradiso classes have the following `definite` instances available:
+
+* [this.client](https://github.com/invrs/paradiso/blob/master/src/paradiso/client.coffee)
+* [this.compress](https://github.com/invrs/paradiso/blob/master/src/paradiso/compress.coffee)
+* [this.package](https://github.com/invrs/paradiso/blob/master/src/paradiso/package.coffee)
+* [this.route](https://github.com/invrs/paradiso/blob/master/src/paradiso/route.coffee)
+* [this.server](https://github.com/invrs/paradiso/blob/master/src/paradiso/server.coffee)
 
 ## Getting started
 
@@ -24,9 +34,9 @@ First, let's create a very simple project with the following structure:
       components/
         - home.js
       init/
+        - app.js
         - build.js
         - client.js
-        - routes.js
         - server.js
       styles/
         - main.scss
@@ -47,30 +57,56 @@ The `app/init` directory includes:
 `app/init/build.js`:
 
 ```js
-import { browserify, env, sass, minify, uglify } from "paradiso"
+import paradiso from "paradiso"
 
-let build = browserify({
-  "../app/init/client": "../public/client"
-}).then(sass({
-  "../app/styles/main": "../public/styles"
-}))
+const ENV = process.env.NODE_ENV
 
-if env == "production"
-  build
-    .then(uglify("../public/client"))
-    .then(minify("../public/styles"))
+export default paradiso(class {
+  compress() {
+    if (ENV != "production")
+      return Promise.resolve()
+
+    return super.compress({
+      css: "../public/styles",
+      js: "../public/client"
+    })
+  }
+
+  package() {
+    return super.package({
+      css: "../app/styles/main",
+      js: "../app/init/client",
+      target: "../public/client"
+    })
+  }
+
+  then() {
+    return this.package().then(compress())
+  }
+})
 ```
 
-#### Routes initializer
+#### App initializer
 
-`app/init/routes.js`:
+`app/init/app.js`:
 
 ```js
-import { mithril } from "paradiso"
+import paradiso from "paradiso"
 
-mithril({ "/": "../components/home" })
+export default paradiso(class {
+  route() {
+    return super.route({
+      "/": "../components/home"
+    })
+  }
 
-module.exports = mithril
+  server() {
+    return super.server({
+      port:   9000
+      static: "public"
+    })
+  }
+})
 ```
 
 #### Client initializer
@@ -78,9 +114,9 @@ module.exports = mithril
 `app/init/client.js`:
 
 ```js
-import { mithril } from "./routes"
+import app from "./app"
 
-mithril().client()
+export default app().client()
 ```
 
 #### Server initializer
@@ -88,14 +124,9 @@ mithril().client()
 `app/init/server.js`: 
 
 ```js
-import { express } from "paradiso"
-import { mithril } from "./routes"
+import app from "./app"
 
-express({
-  engine: mithril()
-  port:   9000
-  static: "public"
-})
+export default app().server()
 ```
 
 ### Component
@@ -106,16 +137,16 @@ express({
 import def from "definite"
 
 module.exports = def(class {
-  then: => "hello!"
+  then() { return "hello!" }
 })
 ```
 
 ### Build assets
 
-Build your client js assets:
+Use the [`def` command](https://github.com/invrs/definite#definite-executor) to run your initialization classes:
 
 ```bash
-node ./init/build
+def init/client
 ```
 
 ### Start server
@@ -123,7 +154,7 @@ node ./init/build
 Start the web server:
 
 ```bash
-node ./init/server
+def init/server
 ```
 
 Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
@@ -132,35 +163,53 @@ This project is available in the [getting-started](https://github.com/invrs/para
 
 ### Components
 
-Let's build a valid HTML page with content:
+Let's build a more complex HTML page with content:
+
+`lib/view.js`:
+
+```js
+import paradiso from "paradiso"
+
+export default paradiso({
+  autoload: "../"
+  key: null  // Views should not hold state
+})
+```
+
+`components/layout.view.js`:
+
+```js
+import view from "../lib/view"
+
+export default view(class {
+  then() {
+    return HTML [
+      HEAD(this.options.title)
+      BODY(this.options.content)
+    ]
+  }
+})
+```
 
 `components/home.js`:
 
 ```js
-import def from "definite"
+import paradiso from "paradiso"
 
-module.exports = def(class {
+paradiso({ autoload: "./" })
 
-  then: () => {
+export default paradiso(class {
+  then() {
+    let title = `home`
     let content = [
       H1(this.title),
       P(`hello`)
     ]
-    let title = `home`
 
     if this.options.server
-      return this.layoutView({ content, title })
+      return this.layout.view(null, { content, title })
     else
       return content
   }
-  
-  layoutView: def(class {
-
-    then: () =>
-      HTML [
-        HEAD(this.options.title)
-        BODY(this.options.content)
-      ]
-  })
 })
 ```
