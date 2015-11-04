@@ -164,7 +164,6 @@ Let's build a more complex HTML page with content:
 
 ```js
 import paradiso from "paradiso"
-
 export default paradiso({
   autoload: "../"
   key: null  // Views should not hold state
@@ -174,9 +173,7 @@ export default paradiso({
 `components/layout.view.js`:
 
 ```js
-import view from "../lib/view"
-
-export default view(class {
+class LayoutView {
   then() {
     return HTML [
       HEAD(this.options.title)
@@ -184,16 +181,15 @@ export default view(class {
     ]
   }
 })
+
+import view from "../lib/view"
+export default view(LayoutView)
 ```
 
 `components/home.js`:
 
 ```js
-import paradiso from "paradiso"
-
-paradiso({ autoload: "./" })
-
-export default paradiso(class {
+class Home {
   then() {
     let title = `home`
     let content = [
@@ -206,5 +202,9 @@ export default paradiso(class {
     else
       return content
   }
-})
+}
+
+import paradiso from "paradiso"
+paradiso({ autoload: "./" })
+export default paradiso(Home)
 ```
