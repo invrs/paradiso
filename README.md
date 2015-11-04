@@ -43,15 +43,6 @@ First, let's create a very simple project with the following structure:
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
-### Initializers
-
-The `app/init` directory includes:
- 
-* `build.js` - builds the client js asset
-* `client.js` - defines the client js asset
-* `routes.js` - routes for client and server
-* `server.js` - starts the web server
-
 #### Build initializer
 
 `app/init/build.js`:
