@@ -160,17 +160,29 @@ This project is available in the [getting-started](https://github.com/invrs/para
 
 Let's build a more complex HTML page with content:
 
-`lib/view.js`:
+`lib/component.js`:
 
 ```js
 import paradiso from "paradiso"
 export default paradiso({
-  autoload: "../"
-  key: null  // Views should not hold state
+  // Autoload dependencies
+  //
+  autoload: `${__dirname}/../components`
 })
 ```
 
-`components/layout.view.js`:
+`lib/view.js`:
+
+```js
+import component from "./component"
+export default component({
+  // Views should never hold state
+  //
+  key: null
+})
+```
+
+`components/layout/layout.view.js`:
 
 ```js
 class LayoutView {
@@ -186,7 +198,7 @@ import view from "../lib/view"
 export default view(LayoutView)
 ```
 
-`components/home.js`:
+`components/home/home.js`:
 
 ```js
 class Home {
@@ -198,13 +210,12 @@ class Home {
     ]
 
     if this.options.server
-      return this.layout.view(null, { content, title })
+      return this.components.layout.view({ content, title })
     else
       return content
   }
 }
 
-import paradiso from "paradiso"
-paradiso({ autoload: "./" })
-export default paradiso(Home)
+import component from "../lib/component"
+export default component(Home)
 ```
