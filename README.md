@@ -38,8 +38,7 @@ First, let's create a very simple project with the following structure:
         - build.js
         - client.js
         - server.js
-      styles/
-        - main.scss
+        - styles.scss
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
@@ -48,6 +47,8 @@ First, let's create a very simple project with the following structure:
 `app/init/build.js`:
 
 ```js
+import paradiso from "paradiso"
+
 const ENV = process.env.NODE_ENV
 
 class Build {
@@ -73,7 +74,6 @@ class Build {
   }
 }
 
-import paradiso from "paradiso"
 export default paradiso(Build)
 ```
 
@@ -82,6 +82,8 @@ export default paradiso(Build)
 `app/init/app.js`:
 
 ```js
+import paradiso from "paradiso"
+
 class App {
   route() {
     return super.route({
@@ -97,7 +99,6 @@ class App {
   }
 }
 
-import paradiso from "paradiso"
 export default paradiso(App)
 ```
 
@@ -126,11 +127,12 @@ export default app().server()
 `components/home.js`:
 
 ```js
+import paradiso from "paradiso"
+
 class Home {
   then() { return "hello!" }
 }
 
-import paradiso from "paradiso"
 export default paradiso(Home)
 ```
 
@@ -175,16 +177,24 @@ export default paradiso({
 
 ```js
 import component from "./component"
+import sugartags from "./paradiso-sugartags"
+
 export default component({
   // Views should never hold state
   //
-  key: null
+  key: null,
+  
+  // Sugartags for templating
+  //
+  mixins: [ sugartags ]
 })
 ```
 
 `components/layout/layout.view.js`:
 
 ```js
+import view from "../lib/view"
+
 class LayoutView {
   then() {
     return HTML [
@@ -194,13 +204,14 @@ class LayoutView {
   }
 })
 
-import view from "../lib/view"
 export default view(LayoutView)
 ```
 
 `components/home/home.js`:
 
 ```js
+import component from "../lib/component"
+
 class Home {
   then() {
     let title = `home`
@@ -216,6 +227,5 @@ class Home {
   }
 }
 
-import component from "../lib/component"
 export default component(Home)
 ```
