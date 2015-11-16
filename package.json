@@ -1,26 +1,22 @@
 {
   "name": "paradiso",
   "version": "1.0.15",
-  "description": "A common way to write reactive and isomorphic apps on any js framework.",
+  "description": "A library-agnostic framework for building concise, testable, and universal Node.js web apps.",
   "main": "lib/paradiso.js",
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
-  "dependencies": {
-    "mithril-node-render": "",
-    "mithril.sugartags": ""
-  },
   "devDependencies": {
-    "coffee-script": "",
-    "express": "",
+    "babel": "^5.8.23",
+    "definite": "",
+    "immutable": "",
     "jasmine": "",
-    "mithril": "",
-    "supertest": ""
+    "source-map-support": ""
   },
   "scripts": {
     "pretest": "npm run compile",
     "prepublish": "npm run compile",
-    "compile": "coffee --compile --output lib/ src/",
-    "start": "coffee -w --compile --output lib/ src/",
+    "compile": "babel src -s --out-dir lib",
+    "start": "babel src -s -w --out-dir lib",
     "test": "jasmine"
   }
 }

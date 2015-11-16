@@ -21,8 +21,6 @@ Paradiso is just a custom [definite](https://github.com/invrs/definite) class bu
 Paradiso classes have the following `definite` instances available:
 
 * [this.client](https://github.com/invrs/paradiso/blob/master/src/paradiso/client.coffee)
-* [this.compress](https://github.com/invrs/paradiso/blob/master/src/paradiso/compress.coffee)
-* [this.package](https://github.com/invrs/paradiso/blob/master/src/paradiso/package.coffee)
 * [this.route](https://github.com/invrs/paradiso/blob/master/src/paradiso/route.coffee)
 * [this.server](https://github.com/invrs/paradiso/blob/master/src/paradiso/server.coffee)
 
@@ -35,47 +33,11 @@ First, let's create a very simple project with the following structure:
         - home.js
       init/
         - app.js
-        - build.js
         - client.js
         - server.js
         - styles.scss
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
-
-#### Build initializer
-
-`app/init/build.js`:
-
-```js
-import paradiso from "paradiso"
-
-const ENV = process.env.NODE_ENV
-
-class Build {
-  compress() {
-    if (ENV != "production") return
-
-    return super.compress({
-      css: "../public/styles",
-      js:  "../public/client"
-    })
-  }
-
-  package() {
-    return super.package({
-      css:  "../app/init/styles",
-      js:   "../app/init/client",
-      dest: "../public"
-    })
-  }
-
-  then() {
-    return this.package().then(compress())
-  }
-}
-
-export default paradiso(Build)
-```
 
 #### App initializer
 
