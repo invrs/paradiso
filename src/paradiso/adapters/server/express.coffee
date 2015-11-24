@@ -46,5 +46,5 @@ module.exports = class Express
 
           server.status 500
           @timeout { component } if @timeout
-        5000
+        @timeout_ms || 5000
       )
