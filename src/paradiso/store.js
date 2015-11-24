@@ -1,16 +1,14 @@
-import def from "definite"
+import definite from "definite"
 import Immutable from "immutable"
 
-let mixin = (Extend) =>
-  class Store extends Extend {
-    constructor(options) {
-      options = Immutable.fromJS(options)
-      super(options)
-    }
-  
-    set(options) {
-      super.set(this.options.mergeDeep(options))
-    }
+class Store {
+  constructor(options) {
+    this.options = Immutable.fromJS(options)
   }
 
-export default def({ mixins: [ mixin ] })
+  set(options) {
+    this.options = this.options.mergeDeep(options)
+  }
+}
+
+export default definite(Store)

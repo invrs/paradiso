@@ -47,16 +47,25 @@ First, let's create a very simple project with the following structure:
 import paradiso from "paradiso"
 
 class App {
-  route() {
-    return super.route({
+  client() {
+    return super.client({
+      router: this.router(),
+      type:   "mithril"
+    })
+  }
+
+  router() {
+    return super.router({
       "/": "../components/home"
     })
   }
 
   server() {
     return super.server({
-      port:   9000
-      static: "public"
+      port:   9000,
+      router: this.router(),
+      static: "public",
+      type:   "express"
     })
   }
 }

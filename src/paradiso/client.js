@@ -1,5 +1,12 @@
-import definite from "definite"
+import internal from "./internal"
 
-export default class {
-  
+class Client {
+  then() {
+    let adapter = this.client[this.get(`type`)]
+    let options = this.store().options
+
+    return adapter(options)
+  }
 }
+
+export default internal(Client)
