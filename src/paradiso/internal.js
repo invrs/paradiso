@@ -1,6 +1,6 @@
 import definite from "definite"
 
-let mixin = (Extend) =>
+let mixin = Extend =>
   class Internal extends Extend {
     constructor(options) {
       super(options)
@@ -10,7 +10,8 @@ let mixin = (Extend) =>
     get(key) {
       if (key) {
         return this.store().options.get(key)
-      } else {
+      }
+      else {
         return this.store().options
       }
     }
