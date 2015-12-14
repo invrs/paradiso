@@ -6,8 +6,12 @@ class Store {
     this.options = Immutable.fromJS(options)
   }
 
+  merge(options) {
+    return this.options.mergeDeep(options)
+  }
+
   set(options) {
-    this.options = this.options.mergeDeep(options)
+    return this.options = this.merge(options)
   }
 }
 

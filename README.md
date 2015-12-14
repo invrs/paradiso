@@ -48,20 +48,20 @@ import paradiso from "paradiso"
 
 class App {
   client() {
-    return super.client({
+    return this.paradiso.client({
       router: this.router(),
       type:   "mithril"
     })
   }
 
   router() {
-    return super.router({
+    return this.paradiso.router({
       "/": "../components/home"
     })
   }
 
   server() {
-    return super.server({
+    return this.paradiso.server({
       port:   9000,
       router: this.router(),
       static: "public",
@@ -115,7 +115,7 @@ Use the `diso` command to run your initialization classes:
 diso init/client
 ```
 
-(**Protip**: `diso` is just a wrapper for [the `def` command](https://github.com/invrs/definite#definite-executor))
+(**Protip**: `diso` is just an alias for [the `def` command](https://github.com/invrs/definite#definite-executor))
 
 ### Start server
 
@@ -148,7 +148,7 @@ export default paradiso({
 
 ```js
 import component from "./component"
-import sugartags from "./paradiso-sugartags"
+import sugartags from "./def-sugar"
 
 export default component({
   // Views should never hold state

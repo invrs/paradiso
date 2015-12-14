@@ -15,7 +15,7 @@
   "scripts": {
     "pretest": "npm run compile",
     "prepublish": "npm run compile",
-    "compile": "babel src -s --out-dir lib",
+    "compile": "rm -rf lib && babel src -s --out-dir lib",
     "start": "babel src -s -w --out-dir lib",
     "test": "jasmine"
   }

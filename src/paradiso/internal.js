@@ -3,23 +3,28 @@ import definite from "definite"
 let mixin = (Extend) =>
   class Internal extends Extend {
     constructor(options) {
-      console.log("this.store constructor")
       super(options)
       this.store(options)
     }
 
-    get get() {
-      console.log("get")
-      return this.store().options.get
+    get(key) {
+      if (key) {
+        return this.store().options.get(key)
+      } else {
+        return this.store().options
+      }
     }
 
     set(options) {
-      console.log("this.store set")
       return this.store(options)
+    }
+
+    then(options) {
+      return super.then(this.store().merge(options))
     }
   }
 
 export default definite({
-  autoload: [ `${__dirname}` ],
+  autoload: [ __dirname ],
   mixins:   [ mixin ]
 })
