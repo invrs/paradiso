@@ -10,6 +10,10 @@ module.exports = class Express
       _globals  = @globals { req, res }
       component = composer.component { _globals }
 
+      if component.server?.halt
+        component.server.end()
+        return
+
       res.type component.response_type || composer.Component.response_type || "html"
 
       @request { component, render }
