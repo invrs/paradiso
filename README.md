@@ -23,7 +23,7 @@ Finally, Paradiso urges you to write your app code in a library-agnostic way. Th
 
 Paradiso is built with [Industry.js](https://github.com/invrs/industry), an awesome factory pattern.
 
-Paradiso exports five main [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `client`, `component`, and `server`.
+Paradiso exports four main [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `component`, and `server`.
 
 The class you pass to the factory builder defines the base class. Paradiso [extends](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) your base class to add Paradiso's functionality.
 
@@ -39,7 +39,7 @@ First, let's create a simple project with the following structure:
 - app.js
 - app/
   - build.js
-  - client.js
+  - component.js
   - server.js
 - components/
   - home.js
@@ -57,8 +57,8 @@ class App {
     return this.app.build()
   }
 
-  client() {
-    return this.app.client()
+  component() {
+    return this.app.component()
   }
 
   routes() {
@@ -83,14 +83,14 @@ import { build, browserify } from "paradiso"
 export default build.extend(browserify)
 ```
 
-#### Client factory
+#### Component factory
 
-`client.js`:
+`component.js`:
 
 ```js
-import { client, mithril } from "paradiso"
+import { component, mithril } from "paradiso"
 
-export default client.extend(mithril)
+export default component.extend(mithril)
 ```
 
 #### Server factory
