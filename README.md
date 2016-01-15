@@ -33,18 +33,19 @@ Additionally, you can call [extend](https://github.com/invrs/industry/blob/maste
 
 ## Start your project
 
-First, let's create a very simple project with the following structure:
+First, let's create a simple project with the following structure:
 
 ```
 - app.js
-- build.js
-- client.js
-- server.js
+- app/
+  - build.js
+  - client.js
+  - server.js
 - components/
   - home.js
 ```
 
-#### App initializer
+#### App factory
 
 `app.js`:
 
@@ -52,15 +53,27 @@ First, let's create a very simple project with the following structure:
 import { app } from "paradiso"
 
 class App {
+  build() {
+    return this.app.build()
+  }
+
+  client() {
+    return this.app.client()
+  }
+
   routes() {
     return { "/": this.components.home }
+  }
+
+  server() {
+    return this.app.server()
   }
 }
 
 export default app(App).include(__dirname)
 ```
 
-#### Build initializer
+#### Build factory
 
 `build.js`:
 
@@ -70,7 +83,7 @@ import { build, browserify } from "paradiso"
 export default build.extend(browserify)
 ```
 
-#### Client initializer
+#### Client factory
 
 `client.js`:
 
@@ -80,7 +93,7 @@ import { client, mithril } from "paradiso"
 export default client.extend(mithril)
 ```
 
-#### Server initializer
+#### Server factory
 
 `server.js`: 
 
@@ -90,7 +103,7 @@ import { server, express } from "paradiso"
 export default server.extend(express)
 ```
 
-### Component
+### Component factory
 
 `components/home.js`:
 
