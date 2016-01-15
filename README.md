@@ -44,8 +44,6 @@ First, let's create a very simple project with the following structure:
 - server.js
 - components/home.js
 
-(**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
-
 #### App initializer
 
 `app.js`:
