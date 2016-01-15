@@ -2,31 +2,30 @@
 
 The hacker's javascript framework for building universal web apps.
 
-## Install
-
-```bash
-npm install -g paradiso
-```
-
 ## Philosophy
 
-Paradiso is built with [Industry.js](https://github.com/invrs/industry), an awesome factory pattern.
+Paradiso is essentially a barebones universal web app that you can run out of the box:
 
-Paradiso was designed for exploration and comprehension of what goes on under the hood. It mandates that you become intimate with its inner workings in order to use it.
+```bash
+> npm install paradiso
+> node -e "require('paradiso').app().server()"
+>
+> Server started on port 3000!
+```
 
-Finally, the framework urges you to write your app code in a library-agnostic way. Paradiso provides the `browserify`, `express`, and `mithril` extensions to serve as an example of how to achieve this.
+Instead of using boilerplate and versioning, you modify the app through an intuitive class inheritance structure.
+
+Paradiso was designed for engineers who want a complete understanding of their stack. Engineers intrinsically learn Paradiso's source code by nature of building their app.
+
+Finally, Paradiso urges you to write your app code in a library-agnostic way. The framework provides the `browserify`, `express`, and `mithril` subclasses to serve as an example of how to achieve this goal.
 
 ## Architecture
+
+Paradiso is built with [Industry.js](https://github.com/invrs/industry), an awesome factory pattern.
 
 Paradiso exports five main [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `client`, `component`, and `server`.
 
 The class you pass to the factory builder defines the base class. Your base class is [extended](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) to add Paradiso's functionality.
-
-Paradiso ships as a functioning barebones app out of the box:
-
-```bash
-node -e "require('paradiso').app().server()"
-```
 
 Because you own the base class, you can modify the output of any Paradiso function. This is how you execute custom logic and write configuration values that change how the barebones app works.
 
