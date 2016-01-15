@@ -1,12 +1,12 @@
 # Paradiso
 
-A library-agnostic framework for building concise, testable, and universal Node.js web apps.
+A framework for building universal, library-agnostic Node.js web apps.
 
 ## Features
 
-Switch out underlying libraries without changing application code.
+Paradiso defines an API for common functions of a univeral web app (e.g., component functionality, web server, asset compilation).
 
-Uses the [definite](https://github.com/invrs/definite) pattern to keep code clean, testable, and extensible.
+The [Industry](https://github.com/invrs/industry) pattern keeps code clean, testable, and extensible.
 
 ## Install
 
@@ -14,83 +14,80 @@ Uses the [definite](https://github.com/invrs/definite) pattern to keep code clea
 npm install -g paradiso
 ```
 
-## The basics
+## The framework for hackers
 
-Paradiso is just a custom [definite](https://github.com/invrs/definite) class builder. Please [read more about definite](https://github.com/invrs/definite) if you haven't.
+Importing Paradiso exposes four [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `client`, and `server`.
 
-Paradiso classes have the following `definite` instances available:
+The class you pass to the factory builder defines the base class. Your base class is [extended](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) to add Paradiso's functionality.
 
-* [this.client](https://github.com/invrs/paradiso/blob/master/src/paradiso/client.coffee)
-* [this.route](https://github.com/invrs/paradiso/blob/master/src/paradiso/route.coffee)
-* [this.server](https://github.com/invrs/paradiso/blob/master/src/paradiso/server.coffee)
+Paradiso ships as a functioning app as soon as you install it:
 
-## Getting started
+```bash
+node -e "require('paradiso').app().server()"
+```
+
+Because you own the base class, you can modify the output of any Paradiso function. This is how you execute custom logic and write configuration values that change how the barebones app works.
+
+Additionally, you can call [extend](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) on your own factories to execute logic before Paradiso does, or stop Paradiso's logic from running entirely.
+
+Paradiso was designed for exploration and comprehension of what goes on under the hood. It mandates that you become intimate with its API in order to use it.
+
+Finally, the framework urges you to write your app code in a library-agnostic way. Paradiso provides the `browserify`, `express`, and `mithril` extensions to serve as an example of how to achieve this.
+
+## Start your project
 
 First, let's create a very simple project with the following structure:
 
-    app/
-      components/
-        - home.js
-      init/
-        - app.js
-        - client.js
-        - server.js
-        - styles.scss
+- app.js
+- build.js
+- client.js
+- server.js
+- components/home.js
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
 
-#### App initializer
-
-`app/init/app.js`:
+`app.js`:
 
 ```js
-import paradiso from "paradiso"
+import { app } from "paradiso"
 
 class App {
-  client() {
-    return this.paradiso.client({
-      router: this.router(),
-      type:   "mithril"
-    })
-  }
-
-  router() {
-    return this.paradiso.router({
-      "/": "../components/home"
-    })
-  }
-
-  server() {
-    return this.paradiso.server({
-      port:   9000,
-      router: this.router(),
-      static: "public",
-      type:   "express"
-    })
+  routes() {
+    return { "/": this.components.home }
   }
 }
 
-export default paradiso(App)
+export default app(App).include(__dirname)
+```
+
+#### Build initializer
+
+`build.js`:
+
+```js
+import { build, browserify } from "paradiso"
+
+export default build.extend(browserify)
 ```
 
 #### Client initializer
 
-`app/init/client.js`:
+`client.js`:
 
 ```js
-import app from "./app"
+import { client, mithril } from "paradiso"
 
-export default app().client()
+export default client.extend(mithril)
 ```
 
 #### Server initializer
 
-`app/init/server.js`: 
+`server.js`: 
 
 ```js
-import app from "./app"
+import { server, express } from "paradiso"
 
-export default app().server()
+export default server.extend(express)
 ```
 
 ### Component
@@ -98,105 +95,23 @@ export default app().server()
 `components/home.js`:
 
 ```js
-import paradiso from "paradiso"
+import { component } from "paradiso"
 
 class Home {
-  then() { return "hello!" }
+  view() { return "hello!" }
 }
 
-export default paradiso(Home)
+export default component(Home)
 ```
 
 ### Build assets
 
-Use the `diso` command to run your initialization classes:
+```bash
+node -e "require('./app').build()"
+```
+
+### Start web server
 
 ```bash
-diso init/client
-```
-
-(**Protip**: `diso` is just an alias for [the `def` command](https://github.com/invrs/definite#definite-executor))
-
-### Start server
-
-Start the web server:
-
-```bash
-diso init/server
-```
-
-Now you have a functioning Paradiso project up and running at [127.0.0.1:9000](http://127.0.0.1:9000).
-
-This project is available in the [getting-started](https://github.com/invrs/paradiso-example/tree/getting-started) branch of the example repo.
-
-### Components
-
-Let's build a more complex HTML page with content:
-
-`lib/component.js`:
-
-```js
-import paradiso from "paradiso"
-export default paradiso({
-  // Autoload dependencies
-  //
-  autoload: `${__dirname}/../components`
-})
-```
-
-`lib/view.js`:
-
-```js
-import component from "./component"
-import sugartags from "./def-sugar"
-
-export default component({
-  // Views should never hold state
-  //
-  key: null,
-  
-  // Sugartags for templating
-  //
-  mixins: [ sugartags ]
-})
-```
-
-`components/layout/layout.view.js`:
-
-```js
-import view from "../lib/view"
-
-class LayoutView {
-  then() {
-    return HTML [
-      HEAD(this.options.title)
-      BODY(this.options.content)
-    ]
-  }
-})
-
-export default view(LayoutView)
-```
-
-`components/home/home.js`:
-
-```js
-import component from "../lib/component"
-
-class Home {
-  then() {
-    let title = `home`
-    let content = [
-      H1(this.title),
-      P(`hello`)
-    ]
-
-    if this.options.server
-      return this.components.layout.view({ content, title })
-    else
-      return content
-  }
-}
-
-export default component(Home)
+node -e "require('./app').server()"
 ```
