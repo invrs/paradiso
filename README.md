@@ -1,6 +1,6 @@
 # Paradiso
 
-The hacker's javascript framework for building universal web apps.
+The hacker's framework for building universal web apps.
 
 ## Philosophy
 
@@ -25,23 +25,23 @@ Paradiso is built with [Industry.js](https://github.com/invrs/industry), an awes
 
 Paradiso exports five main [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `client`, `component`, and `server`.
 
-The class you pass to the factory builder defines the base class. Your base class is [extended](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) to add Paradiso's functionality.
+The class you pass to the factory builder defines the base class. Paradiso [extends](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) your base class to add Paradiso's functionality.
 
-Because you own the base class, you can modify the output of any Paradiso function. This is how you execute custom logic and write configuration values that change how the barebones app works.
+Because you own the base class, you can modify the final logic of any Paradiso function. This is how you execute custom logic and write configuration values that change how the barebones app works.
 
-Additionally, you can call [extend](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) on your own factories to execute logic before Paradiso does, or stop Paradiso's logic from running entirely.
+Additionally, you can call [extend](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) on your own factories to execute logic before Paradiso, or stop Paradiso's logic from running entirely.
 
 ## Start your project
 
 First, let's create a very simple project with the following structure:
 
 ```
-app.js
-build.js
-client.js
-server.js
+- app.js
+- build.js
+- client.js
+- server.js
 - components/
-  home.js
+  - home.js
 ```
 
 #### App initializer
