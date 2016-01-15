@@ -4,7 +4,7 @@ The hacker's framework for building universal web apps.
 
 ## Its just an app
 
-Paradiso is a universal web app with no major framework dependencies. It prints "hello world".
+Paradiso is a universal web app that prints "hello world".
 
 You can boot it right out of the box:
 
@@ -12,34 +12,34 @@ You can boot it right out of the box:
 > npm install paradiso
 > node -e "require('paradiso').app().server()"
 >
-> Server started on port 3000!
+> Server started on localhost:3000
 ```
+
+It has no major framework dependencies.
 
 ## But its not boilerplate!
 
 Even though Paradiso reads as a boilerplate app, you still use it like a framework.
 
-Paradiso introduces a way to add functionality by modifying the class inheritance hierarchy of the app. Any function in the Paradiso app can be extended or modified.
+Paradiso introduces a way to add functionality by extending the class inheritance hierarchy.
 
-Paradiso urges you to write app code in a library-agnostic way. The framework provides the `browserify`, `express`, and `mithril` extensions to serve as an example of how to achieve this goal.
+This approach puts the author closer to the framework code and offers a better understanding of what is happening behind the scenes.
 
-## Architecture
+## Paradise through factories
 
-Typically exposing the inner workings of a framework to be extended and modified by the end user would be a syntactic and logistical challenge. The [Industry.js factory pattern](https://github.com/invrs/industry) creates conventions that make this method an elegant approach.
+Adding functionality through inheritance presents a lot of challenges. The [Industry.js factory pattern](https://github.com/invrs/industry) creates conventions that makes this approach elegant with huge upside.
 
 Paradiso exports four main [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `component`, and `server`.
 
-The class you pass to the factory builder defines the base class. Paradiso [extends](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) your base class to add Paradiso's functionality.
+Create a factory by passing your base class to one of the factory builders. The factory builder [extends](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) your base class to add Paradiso's subclasses.
 
 Because you own the base class, you can modify the final step of any Paradiso function. This is how you add logic and configuration that changes how the app works.
 
-Additionally, you can call [extend](https://github.com/invrs/industry/blob/master/READMORE.md#extend-factories) on your own factories to execute logic before Paradiso, or stop Paradiso's logic from running entirely.
+## Library agnostic
 
-## The big picture
+Paradiso encourages you to write library agnostic app code.
 
-Paradiso is designed for engineers who want a deeper understanding of their framework and app code. Engineers are closer to the framework code, which makes it easier to modify and contribute to.
-
-It is our hope that Paradiso extends the lifetime of app code by making it adaptable, reusable, and comprehensible.
+Paradiso exports the `browserify`, `express`, and `mithril` subclasses to serve as examples of how to achieve this.
 
 ## Start your project
 
