@@ -1,12 +1,6 @@
 # Paradiso
 
-A framework for building universal, library-agnostic Node.js web apps.
-
-## Features
-
-Paradiso defines an API for common functions of a univeral web app (e.g., component functionality, web server, asset compilation).
-
-The [Industry](https://github.com/invrs/industry) pattern keeps code clean, testable, and extensible.
+The hacker's javascript framework for building universal web apps.
 
 ## Install
 
@@ -38,11 +32,14 @@ Finally, the framework urges you to write your app code in a library-agnostic wa
 
 First, let's create a very simple project with the following structure:
 
-- app.js
-- build.js
-- client.js
-- server.js
-- components/home.js
+```
+app.js
+build.js
+client.js
+server.js
+- components/
+  home.js
+```
 
 #### App initializer
 
