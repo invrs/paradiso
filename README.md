@@ -14,7 +14,7 @@ The [Industry](https://github.com/invrs/industry) pattern keeps code clean, test
 npm install -g paradiso
 ```
 
-## The framework for hackers
+## Architecture
 
 Importing Paradiso exposes four [factory builders](https://github.com/invrs/industry/blob/master/READMORE.md#factory-basics): `app`, `build`, `client`, and `server`.
 
@@ -45,6 +45,8 @@ First, let's create a very simple project with the following structure:
 - components/home.js
 
 (**Protip**: Feel free to organize your files how you like. Paradiso is unopinionated.)
+
+#### App initializer
 
 `app.js`:
 
