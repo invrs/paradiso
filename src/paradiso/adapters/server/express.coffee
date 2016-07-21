@@ -32,11 +32,11 @@ module.exports = class Express
     ended      = false
     { server } = component
 
-    Waiter.wait(component).then (promises) =>
+    Waiter.wait(component).then ({ error }) =>
       return if ended
       ended = true
 
-      if promises || component.server?.force_render
+      if !error || component.server?.force_render
         server.end render.view component
       else
         server.status 500

@@ -11,7 +11,7 @@ m = require "mithril"
 # period, it waits for all promises to resolve.
 #
 module.exports = class Waiter
-  constructor: ({ @_promises }) ->
+  constructor: ({ @_promises, @ignore_rejections }) ->
 
   loop: (run_count=0) ->
     length = @_promises.length
@@ -29,6 +29,12 @@ module.exports = class Waiter
         =>
           if length != @_promises.length
             @loop run_count
+        =>
+          unless @ignore_rejections
+            @error = true
+            m.sync []
+          else if length != @_promises.length
+            @loop run_count
       )
 
   delay: (timeout) ->
@@ -44,7 +50,4 @@ module.exports = class Waiter
     ring.wait()
 
   wait: ->
-    @loop().then(
-      => @_promises
-      => false
-    )
+    @loop().then(=> this)
