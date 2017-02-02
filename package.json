@@ -1,13 +1,13 @@
 {
   "name": "paradiso",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "A common way to write reactive and isomorphic apps on any js framework.",
   "main": "lib/paradiso.js",
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "mithril-node-render": "",
-    "mithril.sugartags": ""
+    "mithril-node-render": "*",
+    "mithril.sugartags": "*"
   },
   "devDependencies": {
     "coffee-script": "",
