@@ -13,7 +13,7 @@
     "coffee-script": "",
     "express": "",
     "jasmine": "",
-    "mithril": "",
+    "mithril": "git://github.com/invrs/mithril.js#optional-render-disable",
     "supertest": ""
   },
   "scripts": {
