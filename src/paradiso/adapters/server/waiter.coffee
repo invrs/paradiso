@@ -13,14 +13,14 @@ m = require "mithril"
 module.exports = class Waiter
   constructor: ({ @_promises, @server }) ->
 
-  loop: (run_count=0) ->
+  loop: (run_count=0, fail_count=0) ->
     length = @_promises.length
     
     @delay(10)
       .then(
         =>
           console.log("then")
-          if run_count > 500
+          if run_count > 500 || fail_count > 2
             console.log "a"
             m.sync []
           else
@@ -34,6 +34,8 @@ module.exports = class Waiter
           if length != @_promises.length
             console.log "c"
             @loop run_count
+          else
+            @loop, run_count, fail_count + 1
         =>
           console.log("catch")
           unless @server?.ignore_rejections
@@ -43,6 +45,9 @@ module.exports = class Waiter
           else if length != @_promises.length
             console.log "e"
             @loop run_count
+          else
+            @loop, run_count, fail_count + 1
+
       )
 
   delay: (timeout) ->
