@@ -15,7 +15,7 @@ module.exports = class Waiter
 
   loop: (run_count=0, fail_count=0) ->
     length = @_promises.length
-    return if fail_count > 1
+    return if fail_count > 5
     
     @delay(10)
       .then(
