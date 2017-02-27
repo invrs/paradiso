@@ -32,11 +32,15 @@ module.exports = class Express
     ended      = false
     { server } = component
 
+    console.log("paradiso waiter start")
     Waiter.wait(component).then ({ error }) =>
+      console.log("paradiso waiter callback", error)
+
       return if ended
       ended = true
 
       if !error || component.server?.force_render
+        console.log("paradiso server.end", component.server?.force_render)
         server.end render.view component
       else
         server.status 500

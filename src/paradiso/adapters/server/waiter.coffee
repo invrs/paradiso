@@ -19,21 +19,29 @@ module.exports = class Waiter
     @delay(10)
       .then(
         =>
+          console.log("then")
           if run_count > 500
+            console.log "a"
             m.sync []
           else
+            console.log "b"
             run_count += 1
             m.sync @_promises
       )
       .then(
         =>
+          console.log("then 2")
           if length != @_promises.length
+            console.log "c"
             @loop run_count
         =>
+          console.log("catch")
           unless @server?.ignore_rejections
+            console.log "d"
             @error = true
             m.sync []
           else if length != @_promises.length
+            console.log "e"
             @loop run_count
       )
 
