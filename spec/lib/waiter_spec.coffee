@@ -70,7 +70,7 @@ describe "Waiter", ->
 
       component =
         _promises: [ deferred.promise ]
-        ignore_rejections: true
+        server: ignore_rejections: true
 
       Waiter.wait(component).then ({ error }) =>
         expect(error).toBe undefined

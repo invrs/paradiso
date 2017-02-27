@@ -11,7 +11,7 @@ m = require "mithril"
 # period, it waits for all promises to resolve.
 #
 module.exports = class Waiter
-  constructor: ({ @_promises, @ignore_rejections }) ->
+  constructor: ({ @_promises, @server }) ->
 
   loop: (run_count=0) ->
     length = @_promises.length
@@ -30,7 +30,7 @@ module.exports = class Waiter
           if length != @_promises.length
             @loop run_count
         =>
-          unless @ignore_rejections
+          unless @server?.ignore_rejections
             @error = true
             m.sync []
           else if length != @_promises.length
