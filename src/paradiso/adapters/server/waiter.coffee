@@ -35,7 +35,7 @@ module.exports = class Waiter
             console.log "c"
             @loop run_count
           else
-            @loop, run_count, fail_count + 1
+            @loop run_count, fail_count + 1
         =>
           console.log("catch")
           unless @server?.ignore_rejections
@@ -46,7 +46,7 @@ module.exports = class Waiter
             console.log "e"
             @loop run_count
           else
-            @loop, run_count, fail_count + 1
+            @loop run_count, fail_count + 1
 
       )
 
