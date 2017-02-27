@@ -40,8 +40,9 @@ module.exports = class Express
       ended = true
 
       if !error || component.server?.force_render
-        console.log("paradiso server.end", component.server?.force_render)
-        server.end render.view component
+        view = render.view component
+        console.log("paradiso server.end", view)
+        server.end view
       else
         server.status 500
         @rejected { component } if @rejected
