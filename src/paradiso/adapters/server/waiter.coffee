@@ -15,12 +15,13 @@ module.exports = class Waiter
 
   loop: (run_count=0, fail_count=0) ->
     length = @_promises.length
+    return if fail_count > 1
     
     @delay(10)
       .then(
         =>
           console.log("then")
-          if run_count > 500 || fail_count > 2
+          if run_count > 500
             console.log "a"
             m.sync []
           else
