@@ -1,5 +1,3 @@
-m = require "mithril"
-
 # Exposes a promise array to append to as your components
 # run. Wait for promises to resolve before rendering the
 # server side response.
@@ -20,10 +18,10 @@ module.exports = class Waiter
       .then(
         =>
           if run_count > 500
-            m.sync []
+            Promise.all []
           else
             run_count += 1
-            m.sync @_promises
+            Promise.all @_promises
       )
       .then(
         =>
@@ -32,12 +30,11 @@ module.exports = class Waiter
       )
 
   delay: (timeout) ->
-    deferred = m.deferred()
-    setTimeout(
-      -> deferred.resolve()
-      timeout
-    )
-    deferred.promise
+    new Promise (resolve) ->
+      setTimeout(
+        resolve()
+        timeout
+      )
 
   @wait: (component) ->
     ring = new Waiter component
