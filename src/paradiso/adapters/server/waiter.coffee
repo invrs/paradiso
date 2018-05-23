@@ -36,7 +36,6 @@ module.exports = class Waiter
       )
 
   delay: (timeout) ->
-    deferred = m.deferred()
     new Promise (resolve) ->
       setTimeout(
         resolve
