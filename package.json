@@ -6,14 +6,14 @@
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "mithril-node-render": "0.1.7",
-    "mithril.sugartags": "0.0.6"
+    "mithril-node-render": "2.3.0",
+    "mithril.sugartags": "0.0.8"
   },
   "devDependencies": {
     "coffee-script": "",
     "express": "",
     "jasmine": "",
-    "mithril": "git://github.com/invrs/mithril.js#optional-render-disable",
+    "mithril": "git://github.com/invrs/mithril.js#nikse/mithril-1.1.6-otpional-render",
     "supertest": ""
   },
   "scripts": {
