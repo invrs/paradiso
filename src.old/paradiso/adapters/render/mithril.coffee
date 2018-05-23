@@ -11,6 +11,7 @@ module.exports = class
     _globals = @globals()
 
     controller: ->
+      # composer { _globals }
       component = composer.component { _globals }
       
       if window?
@@ -29,7 +30,7 @@ module.exports = class
 
   routes: (routes, element) ->
     if document?
-      @mithril.route element || document.body, "/", routes
+      @mithril.route.set element || document.body, "/", routes
 
   view: (component) ->
     if document?
