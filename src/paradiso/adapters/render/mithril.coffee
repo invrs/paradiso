@@ -10,7 +10,8 @@ module.exports = class
   component: (composer) ->
     _globals = @globals()
 
-    controller: ->
+    oninit: ->
+      console.log composer
       component = composer.component { _globals }
       
       if window?
