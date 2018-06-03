@@ -1,3 +1,4 @@
+require("mithril/test-utils/browserMock")(global)
 Paradiso = require "../../lib/paradiso"
 request  = require "supertest"
 

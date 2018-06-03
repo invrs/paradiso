@@ -1,5 +1,3 @@
-m = require "mithril"
-
 # Exposes a promise array to append to as your components
 # run. Wait for promises to resolve before rendering the
 # server side response.
@@ -11,53 +9,38 @@ m = require "mithril"
 # period, it waits for all promises to resolve.
 #
 module.exports = class Waiter
-  constructor: ({ @_promises, @server }) ->
+  constructor: ({ @_promises, @ignore_rejections }) ->
 
-  loop: (run_count=0, fail_count=0) ->
+  loop: (run_count=0) ->
     length = @_promises.length
-    return if fail_count > 5
     
     @delay(10)
       .then(
         =>
-          console.log("then")
           if run_count > 500
-            console.log "a"
-            m.sync []
+            Promise.all []
           else
-            console.log "b"
             run_count += 1
-            m.sync @_promises
+            Promise.all @_promises
       )
       .then(
         =>
-          console.log("then 2")
           if length != @_promises.length
-            console.log "c"
             @loop run_count
-          else
-            @loop run_count, fail_count + 1
         =>
-          console.log("catch")
-          unless @server?.ignore_rejections
-            console.log "d"
+          unless @ignore_rejections
             @error = true
-            m.sync []
+            Promise.all []
           else if length != @_promises.length
-            console.log "e"
             @loop run_count
-          else
-            @loop run_count, fail_count + 1
-
       )
 
   delay: (timeout) ->
-    deferred = m.deferred()
-    setTimeout(
-      -> deferred.resolve()
-      timeout
-    )
-    deferred.promise
+    new Promise (resolve) ->
+      setTimeout(
+        resolve
+        timeout
+      )
 
   @wait: (component) ->
     ring = new Waiter component
