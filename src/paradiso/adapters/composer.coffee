@@ -17,8 +17,6 @@ module.exports = class Composer
       A extends
       B extends
       C extends
-      D extends
-      E extends
       F extends
       G extends
       H

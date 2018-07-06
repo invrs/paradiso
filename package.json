@@ -12,7 +12,6 @@
   "devDependencies": {
     "coffee-script": "",
     "express": "",
-    "mithril": "",
     "jasmine": "",
     "supertest": ""
   },
