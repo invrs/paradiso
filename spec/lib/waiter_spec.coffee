@@ -4,13 +4,13 @@ m = require "mithril"
 describe "Waiter", ->
   describe "wait", ->
     it "waits for promises", (done) ->
-      promise = -> new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
+      deferred = m.deferred()
+      deferred2 = m.deferred()
 
       called = false
       called2 = false
 
-      component = _promises: [ promise ]
+      component = _promises: [ deferred.promise ]
       
       Waiter.wait(component).then ({ error }) =>
         expect(error).toBe undefined
@@ -20,26 +20,26 @@ describe "Waiter", ->
 
       setTimeout(
         =>
-          component._promises.push promise2
+          component._promises.push(deferred2.promise)
           called = true
-          component._promises[0]()
+          deferred.resolve()
           setTimeout(
             =>
               called2 = true
-              component._promises[1]()
+              deferred2.resolve()
             30
           )
         10
       )
 
     it "sets error flag", (done) ->
-      promise = ->  new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
+      deferred = m.deferred()
+      deferred2 = m.deferred()
 
       called = false
       called2 = false
 
-      component = _promises: [ promise ]
+      component = _promises: [ deferred.promise ]
 
       Waiter.wait(component).then ({ error }) =>
         expect(error).toBe true
@@ -49,29 +49,28 @@ describe "Waiter", ->
 
       setTimeout(
         =>
-          component._promises.push promise2
+          component._promises.push(deferred2.promise)
           called = true
-          component._promises[0]()
-          component._promises.push Promise.reject()
+          deferred.reject()
           setTimeout(
             =>
               called2 = true
-              component._promises[1]()
+              deferred2.resolve()
             30
           )
         10
       )
 
     it "ignores errors", (done) ->
-      promise = ->  new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
+      deferred = m.deferred()
+      deferred2 = m.deferred()
       
       called = false
       called2 = false
 
       component =
-        _promises: [ promise ]
-        ignore_rejections: true
+        _promises: [ deferred.promise ]
+        server: ignore_rejections: true
 
       Waiter.wait(component).then ({ error }) =>
         expect(error).toBe undefined
@@ -81,14 +80,13 @@ describe "Waiter", ->
 
       setTimeout(
         =>
-          component._promises.push promise2
+          component._promises.push(deferred2.promise)
           called = true
-          component._promises[0]()
-          component._promises.push Promise.reject()
+          deferred.reject()
           setTimeout(
             =>
               called2 = true
-              component._promises[1]()
+              deferred2.resolve()
             30
           )
         10

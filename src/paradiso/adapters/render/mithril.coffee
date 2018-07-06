@@ -29,7 +29,7 @@ module.exports = class
 
   routes: (routes, element) ->
     if document?
-      @mithril.route.set element || document.body, "/", routes
+      @mithril.route element || document.body, "/", routes
 
   view: (component) ->
     if document?
