@@ -17,7 +17,7 @@ describe "Paradiso", ->
   describe "thing", ->
     it "works", (done) ->
       @iso.routes
-        "/": class
+        "/": new class
           constructor: ->
             @title = prop "Welcome"
             @user  = prop new @UserModel()
