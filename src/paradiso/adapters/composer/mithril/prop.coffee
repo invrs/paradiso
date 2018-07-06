@@ -1,5 +1,7 @@
+prop = require "mithril/stream"
+
 module.exports = ({ render }) ->
   class
     constructor: ->
-      @p = (args...) -> render.mithril.prop args...
+      @p = (args...) -> prop args...
       super
