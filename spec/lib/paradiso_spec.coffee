@@ -1,4 +1,7 @@
-require("mithril/test-utils/browserMock")(global)
+#require("mithril/test-utils/browserMock")(global)
+# Polyfill DOM env for mithril
+global.window = require("mithril/test-utils/browserMock.js")();
+global.document = window.document;
 Paradiso = require "../../lib/paradiso"
 request  = require "supertest"
 
@@ -43,5 +46,6 @@ describe "Paradiso", ->
         .get("/")
         .expect(200, "<html><head><title>Welcome</title></head><body>Hello, Joe</body></html>")
         .end (err, res) ->
+          console.log res
           if err then throw err
           done()

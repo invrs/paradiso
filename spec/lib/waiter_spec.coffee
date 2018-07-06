@@ -3,40 +3,46 @@ Waiter = require "../../lib/paradiso/adapters/server/waiter"
 describe "Waiter", ->
   describe "wait", ->
     it "waits for promises", (done) ->
-      promise = -> new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
+      called   = false
+      called2  = false
+      promise = new Promise (resolve) ->
+        setTimeout ->
+          called = true
+          promise2 = new Promise (resolve) ->
+            setTimeout ->
+              called2 = true
+              resolve()
+            , 10
 
-      called = false
-      called2 = false
+          component._promises.push promise2
+          resolve()
+        , 10
 
       component = _promises: [ promise ]
       
       Waiter.wait(component).then ({ error }) =>
+        console.log "thenning"
         expect(error).toBe undefined
         expect(called).toBe true
         expect(called2).toBe true
         done()
 
-      setTimeout(
-        =>
-          component._promises.push promise2
-          called = true
-          component._promises[0]()
-          setTimeout(
-            =>
-              called2 = true
-              component._promises[1]()
-            30
-          )
-        10
-      )
-
     it "sets error flag", (done) ->
-      promise = ->  new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
+      called   = false
+      called2  = false
+      promise = new Promise (resolve) ->
+        setTimeout ->
+          called = true
+          promise2 = new Promise (resolve) ->
+            setTimeout ->
+              called2 = true
+              resolve()
+            , 10
 
-      called = false
-      called2 = false
+          component._promises.push promise2
+          component._promises.push Promise.reject()
+          resolve()
+        , 10
 
       component = _promises: [ promise ]
 
@@ -46,27 +52,22 @@ describe "Waiter", ->
         expect(called2).toBe false
         done()
 
-      setTimeout(
-        =>
-          component._promises.push promise2
-          called = true
-          component._promises[0]()
-          component._promises.push Promise.reject()
-          setTimeout(
-            =>
-              called2 = true
-              component._promises[1]()
-            30
-          )
-        10
-      )
-
     it "ignores errors", (done) ->
-      promise = ->  new Promise (resolve) -> resolve()
-      promise2 = -> new Promise (resolve) -> resolve()
-      
-      called = false
-      called2 = false
+      called   = false
+      called2  = false
+      promise = new Promise (resolve) ->
+        setTimeout ->
+          called = true
+          promise2 = new Promise (resolve) ->
+            setTimeout ->
+              called2 = true
+              resolve()
+            , 10
+
+          component._promises.push promise2
+          component._promises.push Promise.reject()
+          resolve()
+        , 10
 
       component =
         _promises: [ promise ]
@@ -77,18 +78,3 @@ describe "Waiter", ->
         expect(called).toBe true
         expect(called2).toBe true
         done()
-
-      setTimeout(
-        =>
-          component._promises.push promise2
-          called = true
-          component._promises[0]()
-          component._promises.push Promise.reject()
-          setTimeout(
-            =>
-              called2 = true
-              component._promises[1]()
-            30
-          )
-        10
-      )
