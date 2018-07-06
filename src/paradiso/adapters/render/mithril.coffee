@@ -11,7 +11,6 @@ module.exports = class
     _globals = @globals()
 
     oninit: ->
-      console.log composer
       component = composer.component { _globals }
       
       if window?

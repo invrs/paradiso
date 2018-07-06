@@ -4,6 +4,7 @@ global.window = require("mithril/test-utils/browserMock.js")();
 global.document = window.document;
 Paradiso = require "../../lib/paradiso"
 request  = require "supertest"
+prop = require "mithril/stream"
 
 describe "Paradiso", ->
 
@@ -16,20 +17,20 @@ describe "Paradiso", ->
   describe "thing", ->
     it "works", (done) ->
       @iso.routes
-        "/": class
+        "/": new class
           constructor: ->
-            @title = @p "Welcome"
-            @user  = @p @userModel()
+            @title = prop "Welcome"
+            @user  = prop new @UserModel()
 
           view: ->
-            @homeView @
+            new @HomeView @
 
           HomeView: class
             constructor: ({ @title, @user }) ->
 
             header: ->
               "Hello, #{@user().name}"
-            
+
             view: ->
               if @server
                 @HTML [
@@ -46,6 +47,5 @@ describe "Paradiso", ->
         .get("/")
         .expect(200, "<html><head><title>Welcome</title></head><body>Hello, Joe</body></html>")
         .end (err, res) ->
-          console.log res
           if err then throw err
           done()

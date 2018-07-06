@@ -21,7 +21,6 @@ describe "Waiter", ->
       component = _promises: [ promise ]
       
       Waiter.wait(component).then ({ error }) =>
-        console.log "thenning"
         expect(error).toBe undefined
         expect(called).toBe true
         expect(called2).toBe true
