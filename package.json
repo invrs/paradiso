@@ -6,13 +6,13 @@
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "mithril": "git://github.com/invrs/mithril.js#nikse/mithril-1.1.6-otpional-render",
     "mithril-node-render": "^2.3.0",
     "mithril.sugartags": "0.0.8"
   },
   "devDependencies": {
     "coffee-script": "",
     "express": "",
+    "mithril": "",
     "jasmine": "",
     "supertest": ""
   },
