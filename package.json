@@ -6,8 +6,8 @@
   "author": "Winton Welsh <winton@cyclo.ps>",
   "license": "MIT",
   "dependencies": {
-    "mithril-node-render": "0.1.7",
-    "mithril.sugartags": "0.0.6"
+    "mithril-node-render": "^2.3.0",
+    "mithril.sugartags": "0.0.8"
   },
   "devDependencies": {
     "coffee-script": "",
