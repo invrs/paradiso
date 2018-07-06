@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "mithril-node-render": "^2.3.0",
-    "mithril.sugartags": "0.0.8"
+    "mithril.sugartags": "0.0.6"
   },
   "devDependencies": {
     "coffee-script": "",
