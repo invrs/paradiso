@@ -10,10 +10,8 @@ module.exports = class Paradiso
     { @render, @server } = @adapters
 
   route: ({ Component, path }) ->
-    console.log { Component, path }
     composer = @adapters.composer { Component, path }
 
-    console.log composer
     if @server
       @server.get {
         composer, path, render: @adapters.render
