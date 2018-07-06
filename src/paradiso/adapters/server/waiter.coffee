@@ -37,10 +37,7 @@ module.exports = class Waiter
 
   delay: (timeout) ->
     new Promise (resolve) ->
-      setTimeout(
-        resolve
-        timeout
-      )
+      setTimeout resolve, timeout
 
   @wait: (component) ->
     ring = new Waiter component

@@ -1,5 +1,4 @@
 Waiter = require "../../lib/paradiso/adapters/server/waiter"
-m = require "mithril"
 
 describe "Waiter", ->
   describe "wait", ->

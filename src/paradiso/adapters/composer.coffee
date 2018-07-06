@@ -3,6 +3,7 @@ module.exports = class Composer
     A = require("./composer/globals")(options)
     B = require("./composer/helpers")(options)
     C = require("./composer/waiter")(options)
+    E = require("./composer/mithril/redraw")(options)
     F = require("./composer/mithril/sugartags")(options)
     
     if options.extensions
@@ -17,6 +18,7 @@ module.exports = class Composer
       A extends
       B extends
       C extends
+      E extends
       F extends
       G extends
       H
