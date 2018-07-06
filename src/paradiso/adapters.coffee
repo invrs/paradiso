@@ -20,6 +20,8 @@ module.exports = class
             @[name] = lib
 
   composer: ({ Component, path }) ->
+    console.log { Component, path }
+
     if typeof Component == "object"
       adapter = Object.keys(Component)[0]
       new @[adapter] {
