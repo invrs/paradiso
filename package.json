@@ -13,14 +13,13 @@
     "coffee-script": "",
     "express": "",
     "jasmine": "",
-    "mithril": "git://github.com/invrs/mithril.js#optional-render-disable",
+    "mithril": "git://github.com/invrs/mithril.js#nikse/mithril-1.1.6-otpional-render",
     "supertest": ""
   },
   "scripts": {
     "pretest": "npm run compile",
     "prepublish": "npm run compile",
     "compile": "coffee --compile --output lib/ src/",
-    "start": "coffee -w --compile --output lib/ src/",
-    "test": "jasmine"
+    "start": "coffee -w --compile --output lib/ src/"
   }
 }
